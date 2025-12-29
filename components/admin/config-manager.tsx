@@ -1,0 +1,407 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
+import { COLLECTIONS } from "@/lib/firebase/collections";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2, Save } from "lucide-react";
+import { useSiteConfig } from "@/lib/hooks/use-site-config";
+import { useAbout } from "@/lib/hooks/use-about";
+
+export function ConfigManager() {
+  const { config, loading: configLoading } = useSiteConfig();
+  const { about, loading: aboutLoading } = useAbout();
+  const [saving, setSaving] = useState(false);
+
+  const [aboutData, setAboutData] = useState({
+    bio: "",
+    foto: "",
+    diploma: "",
+  });
+
+  const [heroData, setHeroData] = useState({
+    titulo: "",
+    subtitulo: "",
+    imagenes: [""],
+  });
+
+  const [contactData, setContactData] = useState({
+    email: "",
+    phone: "",
+    address: "",
+    whatsapp: {
+      phoneNumber: "",
+      defaultMessage: "",
+    },
+    social: {
+      facebook: "",
+      instagram: "",
+      twitter: "",
+    },
+  });
+
+  useEffect(() => {
+    if (!aboutLoading && about) {
+      setAboutData({
+        bio: about.bio,
+        foto: about.foto,
+        diploma: about.diploma,
+      });
+    }
+  }, [about, aboutLoading]);
+
+  useEffect(() => {
+    if (!configLoading && config) {
+      setHeroData({
+        titulo: config.hero?.titulo || "",
+        subtitulo: config.hero?.subtitulo || "",
+        imagenes: config.hero?.imagenes || [""],
+      });
+      setContactData({
+        email: config.contact?.email || "",
+        phone: config.contact?.phone || "",
+        address: config.contact?.address || "",
+        whatsapp: {
+          phoneNumber: config.contact?.whatsapp?.phoneNumber || "",
+          defaultMessage: config.contact?.whatsapp?.defaultMessage || "",
+        },
+        social: {
+          facebook: config.contact?.social?.facebook || "",
+          instagram: config.contact?.social?.instagram || "",
+          twitter: config.contact?.social?.twitter || "",
+        },
+      });
+    }
+  }, [config, configLoading]);
+
+  const handleSaveAbout = async () => {
+    setSaving(true);
+    try {
+      await setDoc(doc(db, COLLECTIONS.ABOUT, "content"), aboutData);
+      alert("Información guardada correctamente");
+    } catch (error) {
+      console.error("Error saving about:", error);
+      alert("Error al guardar");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveHero = async () => {
+    setSaving(true);
+    try {
+      const configRef = doc(db, COLLECTIONS.CONFIG, "site");
+      const configSnap = await getDoc(configRef);
+      const currentData = configSnap.exists() ? configSnap.data() : {};
+
+      await setDoc(configRef, {
+        ...currentData,
+        hero: heroData,
+      });
+      alert("Hero guardado correctamente");
+    } catch (error) {
+      console.error("Error saving hero:", error);
+      alert("Error al guardar");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveContact = async () => {
+    setSaving(true);
+    try {
+      const configRef = doc(db, COLLECTIONS.CONFIG, "site");
+      const configSnap = await getDoc(configRef);
+      const currentData = configSnap.exists() ? configSnap.data() : {};
+
+      await setDoc(configRef, {
+        ...currentData,
+        contact: contactData,
+      });
+      alert("Contacto guardado correctamente");
+    } catch (error) {
+      console.error("Error saving contact:", error);
+      alert("Error al guardar");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const addHeroImage = () => {
+    setHeroData({ ...heroData, imagenes: [...heroData.imagenes, ""] });
+  };
+
+  const removeHeroImage = (index: number) => {
+    setHeroData({
+      ...heroData,
+      imagenes: heroData.imagenes.filter((_, i) => i !== index),
+    });
+  };
+
+  const updateHeroImage = (index: number, value: string) => {
+    const newImagenes = [...heroData.imagenes];
+    newImagenes[index] = value;
+    setHeroData({ ...heroData, imagenes: newImagenes });
+  };
+
+  if (configLoading || aboutLoading) {
+    return (
+      <div className="flex justify-center items-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin" style={{ color: "#033671" }} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold" style={{ color: "#033671" }}>
+        Configuración General
+      </h2>
+
+      <Tabs defaultValue="about" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="about">Sobre Nosotros</TabsTrigger>
+          <TabsTrigger value="hero">Hero Section</TabsTrigger>
+          <TabsTrigger value="contact">Contacto</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="about">
+          <Card>
+            <CardHeader>
+              <CardTitle style={{ color: "#033671" }}>Sobre Nosotros</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Biografía</Label>
+                <Textarea
+                  value={aboutData.bio}
+                  onChange={(e) => setAboutData({ ...aboutData, bio: e.target.value })}
+                  className="min-h-[150px]"
+                />
+              </div>
+              <div>
+                <Label>URL de Foto</Label>
+                <Input
+                  value={aboutData.foto}
+                  onChange={(e) => setAboutData({ ...aboutData, foto: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>URL de Diploma</Label>
+                <Input
+                  value={aboutData.diploma}
+                  onChange={(e) => setAboutData({ ...aboutData, diploma: e.target.value })}
+                />
+              </div>
+              <Button
+                onClick={handleSaveAbout}
+                disabled={saving}
+                style={{ backgroundColor: "#033671", color: "#ffffff" }}
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Guardando...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Guardar
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="hero">
+          <Card>
+            <CardHeader>
+              <CardTitle style={{ color: "#033671" }}>Hero Section</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Título</Label>
+                <Input
+                  value={heroData.titulo}
+                  onChange={(e) => setHeroData({ ...heroData, titulo: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>Subtítulo</Label>
+                <Input
+                  value={heroData.subtitulo}
+                  onChange={(e) => setHeroData({ ...heroData, subtitulo: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>Imágenes del Hero</Label>
+                {heroData.imagenes.map((imagen, index) => (
+                  <div key={index} className="flex gap-2 mb-2">
+                    <Input
+                      value={imagen}
+                      onChange={(e) => updateHeroImage(index, e.target.value)}
+                      placeholder={`URL de imagen ${index + 1}`}
+                    />
+                    {heroData.imagenes.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => removeHeroImage(index)}
+                      >
+                        Eliminar
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={addHeroImage}
+                  className="mt-2"
+                >
+                  Agregar Imagen
+                </Button>
+              </div>
+              <Button
+                onClick={handleSaveHero}
+                disabled={saving}
+                style={{ backgroundColor: "#033671", color: "#ffffff" }}
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Guardando...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Guardar
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="contact">
+          <Card>
+            <CardHeader>
+              <CardTitle style={{ color: "#033671" }}>Información de Contacto</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Email</Label>
+                <Input
+                  value={contactData.email}
+                  onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>Teléfono</Label>
+                <Input
+                  value={contactData.phone}
+                  onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>Dirección</Label>
+                <Input
+                  value={contactData.address}
+                  onChange={(e) => setContactData({ ...contactData, address: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>WhatsApp - Número</Label>
+                <Input
+                  value={contactData.whatsapp.phoneNumber}
+                  onChange={(e) =>
+                    setContactData({
+                      ...contactData,
+                      whatsapp: { ...contactData.whatsapp, phoneNumber: e.target.value },
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <Label>WhatsApp - Mensaje por Defecto</Label>
+                <Textarea
+                  value={contactData.whatsapp.defaultMessage}
+                  onChange={(e) =>
+                    setContactData({
+                      ...contactData,
+                      whatsapp: { ...contactData.whatsapp, defaultMessage: e.target.value },
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <Label>Facebook URL</Label>
+                <Input
+                  value={contactData.social.facebook}
+                  onChange={(e) =>
+                    setContactData({
+                      ...contactData,
+                      social: { ...contactData.social, facebook: e.target.value },
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <Label>Instagram URL</Label>
+                <Input
+                  value={contactData.social.instagram}
+                  onChange={(e) =>
+                    setContactData({
+                      ...contactData,
+                      social: { ...contactData.social, instagram: e.target.value },
+                    })
+                  }
+                />
+              </div>
+              <div>
+                <Label>Twitter URL</Label>
+                <Input
+                  value={contactData.social.twitter}
+                  onChange={(e) =>
+                    setContactData({
+                      ...contactData,
+                      social: { ...contactData.social, twitter: e.target.value },
+                    })
+                  }
+                />
+              </div>
+              <Button
+                onClick={handleSaveContact}
+                disabled={saving}
+                style={{ backgroundColor: "#033671", color: "#ffffff" }}
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Guardando...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Guardar
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
+
+
+
