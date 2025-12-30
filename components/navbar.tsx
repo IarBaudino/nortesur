@@ -62,7 +62,7 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 md:gap-3 group relative"
+            className="flex items-center group relative"
           >
             <motion.div
               className="relative h-10 w-10 md:h-12 md:w-12 flex-shrink-0 rounded-lg overflow-hidden"
@@ -78,20 +78,6 @@ export function Navbar() {
                 priority
               />
             </motion.div>
-            <div className="flex flex-col">
-              <span
-                className="text-lg md:text-xl font-bold tracking-tight transition-all duration-300"
-                style={{ color: "#033671" }}
-              >
-                Nortesur Travel
-              </span>
-              <span
-                className="hidden md:block text-xs font-medium tracking-wider uppercase"
-                style={{ color: "#6D4C05" }}
-              >
-                Tu viaje, nuestra pasión
-              </span>
-            </div>
           </Link>
 
           {/* Desktop Navigation - Siempre visible en pantallas medianas y grandes */}
@@ -111,16 +97,6 @@ export function Navbar() {
                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#6D4C05] group-hover:w-3/4 transition-all duration-300 rounded-full" />
               </Link>
             ))}
-            <Button
-              asChild
-              className="ml-1 lg:ml-2 xl:ml-4 px-3 lg:px-4 xl:px-5 py-2 text-xs lg:text-sm xl:text-base rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap"
-              style={{
-                backgroundColor: "#033671",
-                color: "#ffffff",
-              }}
-            >
-              <Link href="/#consulta">Consultar</Link>
-            </Button>
           </nav>
 
           {/* Mobile Menu Button - Solo visible en pantallas pequeñas */}
@@ -184,24 +160,6 @@ export function Navbar() {
                   </Link>
                 </motion.div>
               ))}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navItems.length * 0.05 }}
-                className="pt-4"
-              >
-                <Button
-                  asChild
-                  className="w-full py-6 rounded-lg font-semibold shadow-lg"
-                  style={{
-                    backgroundColor: "#033671",
-                    color: "#ffffff",
-                  }}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Link href="/#consulta">Consultar</Link>
-                </Button>
-              </motion.div>
             </nav>
           </motion.div>
         )}

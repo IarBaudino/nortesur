@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { COLLECTIONS } from "@/lib/firebase/collections";
 import type { Flyer } from "@/lib/firebase/types";
@@ -11,31 +11,35 @@ export function useFlyers() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchFlyers() {
-      try {
-        const q = query(
-          collection(db, COLLECTIONS.FLYERS),
-          orderBy("createdAt", "desc")
-        );
-        const querySnapshot = await getDocs(q);
+    // Usar onSnapshot para escuchar cambios en tiempo real
+    const unsubscribe = onSnapshot(
+      collection(db, COLLECTIONS.FLYERS),
+      (querySnapshot) => {
         const flyersData: Flyer[] = [];
         querySnapshot.forEach((doc) => {
-          flyersData.push({
+          const data = doc.data();
+          const flyer = {
             id: doc.id,
-            ...doc.data(),
-            createdAt: doc.data().createdAt?.toDate() || new Date(),
-            updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-          } as Flyer);
+            ...data,
+            createdAt: data.createdAt?.toDate() || data.updatedAt?.toDate() || new Date(),
+            updatedAt: data.updatedAt?.toDate() || new Date(),
+          } as Flyer;
+          flyersData.push(flyer);
         });
+        // Ordenar por fecha de actualización (más recientes primero)
+        flyersData.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+        console.log("Flyers actualizados:", flyersData.length, flyersData);
         setFlyers(flyersData);
-      } catch (error) {
+        setLoading(false);
+      },
+      (error) => {
         console.error("Error fetching flyers:", error);
-      } finally {
         setLoading(false);
       }
-    }
+    );
 
-    fetchFlyers();
+    // Limpiar la suscripción al desmontar el componente
+    return () => unsubscribe();
   }, []);
 
   return { flyers, loading };

@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { Trash2, Edit, Plus, Loader2 } from "lucide-react";
 import {
   Dialog,
@@ -153,24 +154,13 @@ export function FlyersManager() {
                   required
                 />
               </div>
-              <div>
-                <Label>URL de Imagen</Label>
-                <Input
-                  value={formData.imagen}
-                  onChange={(e) => setFormData({ ...formData, imagen: e.target.value })}
-                  required
-                />
-                {formData.imagen && (
-                  <img
-                    src={formData.imagen}
-                    alt="Preview"
-                    className="mt-2 w-full h-48 object-cover rounded"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                  />
-                )}
-              </div>
+              <ImageUpload
+                value={formData.imagen}
+                onChange={(url) => setFormData({ ...formData, imagen: url })}
+                folder="nortesur/flyers"
+                label="Imagen del Flyer"
+                required
+              />
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="destacado"
@@ -201,12 +191,21 @@ export function FlyersManager() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {flyers.map((flyer) => (
           <Card key={flyer.id}>
-            <div className="relative h-48">
-              <img
-                src={flyer.imagen}
-                alt={flyer.titulo}
-                className="w-full h-full object-cover"
-              />
+            <div className="relative h-48 bg-gray-100 flex items-center justify-center">
+              {flyer.imagen && flyer.imagen.trim() !== "" ? (
+                <img
+                  src={flyer.imagen}
+                  alt={flyer.titulo}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = "none";
+                  }}
+                />
+              ) : (
+                <div className="text-gray-400 text-sm text-center p-4">
+                  Sin imagen
+                </div>
+              )}
               {flyer.destacado && (
                 <div className="absolute top-2 right-2 bg-[#6D4C05] text-white px-2 py-1 rounded text-xs">
                   Destacado

@@ -20,7 +20,10 @@ export function ConfigManager() {
   const [saving, setSaving] = useState(false);
 
   const [aboutData, setAboutData] = useState({
-    bio: "",
+    acercaDeNosotros: "",
+    viajesDiseñados: "",
+    mision: "",
+    vision: "",
     foto: "",
     diploma: "",
   });
@@ -49,9 +52,12 @@ export function ConfigManager() {
   useEffect(() => {
     if (!aboutLoading && about) {
       setAboutData({
-        bio: about.bio,
-        foto: about.foto,
-        diploma: about.diploma,
+        acercaDeNosotros: about.acercaDeNosotros || "",
+        viajesDiseñados: about.viajesDiseñados || "",
+        mision: about.mision || "",
+        vision: about.vision || "",
+        foto: about.foto || "",
+        diploma: about.diploma || "",
       });
     }
   }, [about, aboutLoading]);
@@ -178,11 +184,39 @@ export function ConfigManager() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>Biografía</Label>
+                <Label>Acerca de Nosotros</Label>
                 <Textarea
-                  value={aboutData.bio}
-                  onChange={(e) => setAboutData({ ...aboutData, bio: e.target.value })}
+                  value={aboutData.acercaDeNosotros}
+                  onChange={(e) => setAboutData({ ...aboutData, acercaDeNosotros: e.target.value })}
                   className="min-h-[150px]"
+                  placeholder="Texto para la sección 'Acerca de Nosotros'"
+                />
+              </div>
+              <div>
+                <Label>Viajes Diseñados a la Medida de Cada Cliente</Label>
+                <Textarea
+                  value={aboutData.viajesDiseñados}
+                  onChange={(e) => setAboutData({ ...aboutData, viajesDiseñados: e.target.value })}
+                  className="min-h-[150px]"
+                  placeholder="Texto para la sección 'Viajes Diseñados a la Medida de Cada Cliente'"
+                />
+              </div>
+              <div>
+                <Label>Misión</Label>
+                <Textarea
+                  value={aboutData.mision}
+                  onChange={(e) => setAboutData({ ...aboutData, mision: e.target.value })}
+                  className="min-h-[150px]"
+                  placeholder="Texto para la sección 'Misión'"
+                />
+              </div>
+              <div>
+                <Label>Visión</Label>
+                <Textarea
+                  value={aboutData.vision}
+                  onChange={(e) => setAboutData({ ...aboutData, vision: e.target.value })}
+                  className="min-h-[150px]"
+                  placeholder="Texto para la sección 'Visión'"
                 />
               </div>
               <div>

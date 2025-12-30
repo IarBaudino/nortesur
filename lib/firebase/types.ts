@@ -72,7 +72,10 @@ export interface SiteContent {
 }
 
 export interface AboutContent {
-  bio: string;
+  acercaDeNosotros: string;
+  viajesDiseñados: string;
+  mision: string;
+  vision: string;
   foto: string;
   diploma: string;
 }

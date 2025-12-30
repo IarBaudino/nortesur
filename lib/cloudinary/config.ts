@@ -1,16 +1,12 @@
 /**
  * Configuración de Cloudinary
  *
- * Para obtener estas credenciales:
- * 1. Ve a https://cloudinary.com/
- * 2. Crea una cuenta gratuita
- * 3. Ve a Dashboard
- * 4. Copia las credenciales aquí
- *
- * TODO: Descomentar cuando se configure Cloudinary
+ * Credenciales configuradas en .env.local:
+ * - CLOUDINARY_CLOUD_NAME
+ * - CLOUDINARY_API_KEY
+ * - CLOUDINARY_API_SECRET
  */
 
-/*
 import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({
@@ -20,7 +16,3 @@ cloudinary.config({
 });
 
 export default cloudinary;
-*/
-
-// Placeholder hasta que se configure Cloudinary
-export default null;

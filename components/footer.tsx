@@ -9,6 +9,7 @@ import {
   Facebook,
   Instagram,
   Twitter,
+  Lock,
 } from "lucide-react";
 import { useSiteConfig } from "@/lib/hooks/use-site-config";
 
@@ -22,39 +23,76 @@ export function Footer() {
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-[#6D4C05]/10 to-transparent rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-black/10 to-transparent rounded-full blur-3xl"></div>
 
-      <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
-          {/* Logo y descripción */}
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="relative h-10 w-10">
+      <div className="container mx-auto px-4 py-4 relative z-10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+          {/* Primera línea: Logo, enlaces y redes sociales */}
+          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
+            <div className="flex items-center gap-2">
+              <div className="relative h-6 w-6">
                 <Image
                   src="/images/nortesurlogo.jpg"
                   alt="Nortesur Travel Logo"
                   fill
-                  sizes="40px"
+                  sizes="24px"
                   className="object-contain"
                 />
               </div>
-              <span className="text-xl font-bold" style={{ color: "#D9DEE4" }}>
+              <span className="font-semibold" style={{ color: "#D9DEE4" }}>
                 Nortesur Travel
               </span>
             </div>
-            <p className="mb-4 max-w-md" style={{ color: "#CAD0DA" }}>
-              Tu agencia de viajes de confianza. Creamos experiencias únicas que
-              recordarás para siempre.
-            </p>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap items-center gap-3 md:gap-4">
+              <Link
+                href="/servicios"
+                className="hover:text-[#6D4C05] transition-colors duration-200"
+                style={{ color: "#CAD0DA" }}
+              >
+                Servicios
+              </Link>
+              <span style={{ color: "#6D4C05" }}>•</span>
+              <Link
+                href="/#testimonios"
+                className="hover:text-[#6D4C05] transition-colors duration-200"
+                style={{ color: "#CAD0DA" }}
+              >
+                Testimonios
+              </Link>
+              <span style={{ color: "#6D4C05" }}>•</span>
+              <Link
+                href="/#faq"
+                className="hover:text-[#6D4C05] transition-colors duration-200"
+                style={{ color: "#CAD0DA" }}
+              >
+                FAQ
+              </Link>
+              <span style={{ color: "#6D4C05" }}>•</span>
+              <Link
+                href="/blog"
+                className="hover:text-[#6D4C05] transition-colors duration-200"
+                style={{ color: "#CAD0DA" }}
+              >
+                Blog
+              </Link>
+              <span style={{ color: "#6D4C05" }}>•</span>
+              <Link
+                href="/#consulta"
+                className="hover:text-[#6D4C05] transition-colors duration-200"
+                style={{ color: "#CAD0DA" }}
+              >
+                Contacto
+              </Link>
+            </div>
+            <div className="flex gap-2">
               {contact.social.facebook && (
                 <a
                   href={contact.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg"
-                  style={{ backgroundColor: "rgba(109, 76, 5, 0.3)" }}
+                  className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+                  style={{ backgroundColor: "rgba(109, 76, 5, 0.2)" }}
                   aria-label="Facebook"
                 >
-                  <Facebook className="w-5 h-5" style={{ color: "#6D4C05" }} />
+                  <Facebook className="w-3.5 h-3.5" style={{ color: "#6D4C05" }} />
                 </a>
               )}
               {contact.social.instagram && (
@@ -62,11 +100,11 @@ export function Footer() {
                   href={contact.social.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg"
-                  style={{ backgroundColor: "rgba(109, 76, 5, 0.3)" }}
+                  className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+                  style={{ backgroundColor: "rgba(109, 76, 5, 0.2)" }}
                   aria-label="Instagram"
                 >
-                  <Instagram className="w-5 h-5" style={{ color: "#6D4C05" }} />
+                  <Instagram className="w-3.5 h-3.5" style={{ color: "#6D4C05" }} />
                 </a>
               )}
               {contact.social.twitter && (
@@ -74,101 +112,44 @@ export function Footer() {
                   href={contact.social.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg"
-                  style={{ backgroundColor: "rgba(109, 76, 5, 0.3)" }}
+                  className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+                  style={{ backgroundColor: "rgba(109, 76, 5, 0.2)" }}
                   aria-label="Twitter"
                 >
-                  <Twitter className="w-5 h-5" style={{ color: "#6D4C05" }} />
+                  <Twitter className="w-3.5 h-3.5" style={{ color: "#6D4C05" }} />
                 </a>
               )}
             </div>
           </div>
-
-          {/* Enlaces rápidos */}
-          <div>
-            <h3 className="font-bold text-lg mb-6" style={{ color: "#D9DEE4" }}>Enlaces Rápidos</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="/servicios"
-                  className="hover:text-[#6D4C05] transition-colors duration-300 inline-block hover:translate-x-1"
-                  style={{ color: "#CAD0DA" }}
-                >
-                  Servicios
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/#testimonios"
-                  className="hover:text-[#6D4C05] transition-colors duration-300 inline-block hover:translate-x-1"
-                  style={{ color: "#CAD0DA" }}
-                >
-                  Testimonios
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/#faq"
-                  className="hover:text-[#6D4C05] transition-colors duration-300 inline-block hover:translate-x-1"
-                  style={{ color: "#CAD0DA" }}
-                >
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/blog"
-                  className="hover:text-[#6D4C05] transition-colors duration-300 inline-block hover:translate-x-1"
-                  style={{ color: "#CAD0DA" }}
-                >
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/#consulta"
-                  className="hover:text-[#6D4C05] transition-colors duration-300 inline-block hover:translate-x-1"
-                  style={{ color: "#CAD0DA" }}
-                >
-                  Contacto
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contacto */}
-          <div>
-            <h3 className="font-semibold mb-4">Contacto</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <Mail className="w-5 h-5 mt-0.5" style={{ color: "#6D4C05" }} />
-                <span style={{ color: "#CAD0DA" }}>{contact.email}</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Phone
-                  className="w-5 h-5 mt-0.5"
-                  style={{ color: "#6D4C05" }}
-                />
-                <span style={{ color: "#CAD0DA" }}>{contact.phone}</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin
-                  className="w-5 h-5 mt-0.5"
-                  style={{ color: "#6D4C05" }}
-                />
-                <span style={{ color: "#CAD0DA" }}>{contact.address}</span>
-              </li>
-            </ul>
-          </div>
         </div>
 
+        {/* Segunda línea: Contacto y Admin */}
         <div
-          className="border-t mt-8 pt-8 text-center text-sm"
+          className="border-t mt-3 pt-3 flex flex-col md:flex-row items-center justify-between gap-3 text-xs"
           style={{ borderColor: "rgba(109, 76, 5, 0.2)", color: "#CAD0DA" }}
         >
+          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
+            <span className="flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5" style={{ color: "#6D4C05" }} />
+              <span>{contact.email}</span>
+            </span>
+            <span style={{ color: "#6D4C05" }}>•</span>
+            <span className="flex items-center gap-1.5">
+              <Phone className="w-3.5 h-3.5" style={{ color: "#6D4C05" }} />
+              <span>{contact.phone}</span>
+            </span>
+            <span style={{ color: "#6D4C05" }}>•</span>
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-1.5 hover:text-[#6D4C05] transition-colors duration-200"
+              style={{ color: "#CAD0DA" }}
+            >
+              <Lock className="w-3.5 h-3.5" />
+              <span>Admin</span>
+            </Link>
+          </div>
           <p>
-            © {new Date().getFullYear()} Nortesur Travel. Todos los derechos
-            reservados.
+            © {new Date().getFullYear()} Nortesur Travel. Todos los derechos reservados.
           </p>
         </div>
       </div>
