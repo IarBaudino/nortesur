@@ -14,7 +14,7 @@ Sitio web moderno y elegante para **Nortesur Travel**, una agencia de viajes esp
 - 🖼️ **Carousel de Imágenes**: Hero section con carousel automático de imágenes de fondo
 - 📝 **Formulario de Consulta**: Sistema de contacto integrado con validación
 - 💬 **Integración WhatsApp**: Botón flotante de WhatsApp para contacto directo
-- 🎯 **Secciones Dinámicas**: 
+- 🎯 **Secciones Dinámicas**:
   - Hero Section con carousel
   - Servicios destacados (Flyers)
   - Testimonios de clientes
@@ -29,6 +29,7 @@ Sitio web moderno y elegante para **Nortesur Travel**, una agencia de viajes esp
 ## 🛠️ Tecnologías Utilizadas
 
 ### Frontend
+
 - **Next.js 15.1.0** - Framework React con SSR y SSG
 - **React 18.3.1** - Biblioteca de UI
 - **TypeScript 5.3.0** - Tipado estático
@@ -37,6 +38,7 @@ Sitio web moderno y elegante para **Nortesur Travel**, una agencia de viajes esp
 - **Shadcn/ui** - Componentes UI accesibles y personalizables
 
 ### Backend & Servicios
+
 - **Firebase 10.7.1** - Backend as a Service
   - Firestore - Base de datos NoSQL
   - Firebase Storage - Almacenamiento de archivos
@@ -44,6 +46,7 @@ Sitio web moderno y elegante para **Nortesur Travel**, una agencia de viajes esp
 - **Cloudinary** - Gestión de imágenes (configuración pendiente)
 
 ### Herramientas de Desarrollo
+
 - **ESLint** - Linter para JavaScript/TypeScript
 - **PostCSS** - Procesador de CSS
 - **Autoprefixer** - Compatibilidad de navegadores
@@ -70,19 +73,22 @@ El sitio utiliza una paleta de colores personalizada para Nortesur Travel:
 ### Pasos de Instalación
 
 1. **Clonar el repositorio**
+
    ```bash
    git clone https://github.com/IarBaudino/nortesur.git
    cd nortesur
    ```
 
 2. **Instalar dependencias**
+
    ```bash
    npm install
    ```
 
 3. **Configurar variables de entorno**
-   
+
    Crea un archivo `.env.local` en la raíz del proyecto con las siguientes variables:
+
    ```env
    NEXT_PUBLIC_FIREBASE_API_KEY=tu_api_key
    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=tu_auth_domain
@@ -90,7 +96,7 @@ El sitio utiliza una paleta de colores personalizada para Nortesur Travel:
    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=tu_storage_bucket
    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=tu_messaging_sender_id
    NEXT_PUBLIC_FIREBASE_APP_ID=tu_app_id
-   
+
    # Cloudinary (opcional)
    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=tu_cloud_name
    NEXT_PUBLIC_CLOUDINARY_API_KEY=tu_api_key
@@ -100,12 +106,13 @@ El sitio utiliza una paleta de colores personalizada para Nortesur Travel:
    Puedes usar `env.example.txt` como referencia.
 
 4. **Ejecutar el servidor de desarrollo**
+
    ```bash
    npm run dev
    ```
 
 5. **Abrir en el navegador**
-   
+
    Navega a [http://localhost:3000](http://localhost:3000)
 
 ## 🚀 Scripts Disponibles
@@ -203,6 +210,7 @@ Este proyecto es privado y propiedad de Nortesur Travel.
 ## 👤 Autor
 
 **Iara Baudino**
+
 - GitHub: [@IarBaudino](https://github.com/IarBaudino)
 - Email: iaba.sur@gmail.com
 
@@ -217,4 +225,3 @@ Este proyecto es privado y propiedad de Nortesur Travel.
 ---
 
 ⭐ Si te gusta este proyecto, ¡dale una estrella en GitHub!
-
