@@ -3,13 +3,13 @@
 import { useTestimonios } from "@/lib/hooks/use-testimonios";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Loader2, Quote } from "lucide-react";
-import { WhatsAppButton } from "@/components/whatsapp-button";
-import { useContact } from "@/lib/hooks/use-site-config";
+import { Button } from "@/components/ui/button";
+import { MessageCircle } from "lucide-react";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { motion } from "framer-motion";
 
 export function TestimoniosSection() {
   const { testimonios, loading } = useTestimonios();
-  const { contactData } = useContact();
 
   if (loading) {
     return (
@@ -109,11 +109,22 @@ export function TestimoniosSection() {
           <p className="mb-6 text-lg font-medium" style={{ color: "#2E486B" }}>
             ¿Quieres ser el próximo en compartir tu experiencia?
           </p>
-          <WhatsAppButton
-            phoneNumber={contactData.whatsapp.phoneNumber}
-            message={contactData.whatsapp.defaultMessage}
+          <Button
+            onClick={() => {
+              const mensajeTestimonio = `Hola! quiero dejar mi experiencia con NorteSur Travel:
+
+Nombre y apellido:
+Destino:`;
+              const whatsappUrl = getWhatsAppUrl("+5493512399267", mensajeTestimonio);
+              window.open(whatsappUrl, "_blank");
+            }}
             size="lg"
-          />
+            className="hover:opacity-90 transition-opacity hover:scale-105 shadow-lg hover:shadow-xl"
+            style={{ backgroundColor: "#25D366", color: "#ffffff" }}
+          >
+            <MessageCircle className="mr-2 h-5 w-5" />
+            ¡Quiero dejar mi experiencia!
+          </Button>
         </motion.div>
       </div>
     </section>

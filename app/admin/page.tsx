@@ -18,6 +18,7 @@ import { FAQManager } from "@/components/admin/faq-manager";
 import { EmpresasManager } from "@/components/admin/empresas-manager";
 import { BlogManager } from "@/components/admin/blog-manager";
 import { ConfigManager } from "@/components/admin/config-manager";
+import { ConsultasManager } from "@/components/admin/consultas-manager";
 
 export default function AdminPage() {
   const [email, setEmail] = useState("");
@@ -136,8 +137,9 @@ export default function AdminPage() {
           </Button>
         </div>
 
-        <Tabs defaultValue="flyers" className="w-full">
-          <TabsList className="grid w-full grid-cols-6 mb-8">
+        <Tabs defaultValue="consultas" className="w-full">
+          <TabsList className="grid w-full grid-cols-7 mb-8">
+            <TabsTrigger value="consultas">Consultas</TabsTrigger>
             <TabsTrigger value="flyers">Flyers</TabsTrigger>
             <TabsTrigger value="testimonios">Testimonios</TabsTrigger>
             <TabsTrigger value="faq">FAQ</TabsTrigger>
@@ -145,6 +147,10 @@ export default function AdminPage() {
             <TabsTrigger value="blog">Blog</TabsTrigger>
             <TabsTrigger value="config">Configuración</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="consultas">
+            <ConsultasManager />
+          </TabsContent>
 
           <TabsContent value="flyers">
             <FlyersManager />

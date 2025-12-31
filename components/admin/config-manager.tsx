@@ -32,6 +32,12 @@ export function ConfigManager() {
     titulo: "",
     subtitulo: "",
     imagenes: [""],
+    estadisticas: {
+      paises: 0,
+      destinos: 0,
+      aerolineas: 0,
+      atracciones: 0,
+    },
   });
 
   const [contactData, setContactData] = useState({
@@ -68,6 +74,12 @@ export function ConfigManager() {
         titulo: config.hero?.titulo || "",
         subtitulo: config.hero?.subtitulo || "",
         imagenes: config.hero?.imagenes || [""],
+        estadisticas: config.hero?.estadisticas || {
+          paises: 50,
+          destinos: 200,
+          aerolineas: 30,
+          atracciones: 500,
+        },
       });
       setContactData({
         email: config.contact?.email || "",
@@ -303,6 +315,83 @@ export function ConfigManager() {
                   Agregar Imagen
                 </Button>
               </div>
+              
+              <div className="pt-4 border-t">
+                <Label className="text-lg font-semibold mb-4 block" style={{ color: "#033671" }}>
+                  Estadísticas
+                </Label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Cantidad de Países</Label>
+                    <Input
+                      type="number"
+                      value={heroData.estadisticas.paises}
+                      onChange={(e) =>
+                        setHeroData({
+                          ...heroData,
+                          estadisticas: {
+                            ...heroData.estadisticas,
+                            paises: parseInt(e.target.value) || 0,
+                          },
+                        })
+                      }
+                      min="0"
+                    />
+                  </div>
+                  <div>
+                    <Label>Cantidad de Destinos</Label>
+                    <Input
+                      type="number"
+                      value={heroData.estadisticas.destinos}
+                      onChange={(e) =>
+                        setHeroData({
+                          ...heroData,
+                          estadisticas: {
+                            ...heroData.estadisticas,
+                            destinos: parseInt(e.target.value) || 0,
+                          },
+                        })
+                      }
+                      min="0"
+                    />
+                  </div>
+                  <div>
+                    <Label>Cantidad de Aerolíneas</Label>
+                    <Input
+                      type="number"
+                      value={heroData.estadisticas.aerolineas}
+                      onChange={(e) =>
+                        setHeroData({
+                          ...heroData,
+                          estadisticas: {
+                            ...heroData.estadisticas,
+                            aerolineas: parseInt(e.target.value) || 0,
+                          },
+                        })
+                      }
+                      min="0"
+                    />
+                  </div>
+                  <div>
+                    <Label>Cantidad de Atracciones</Label>
+                    <Input
+                      type="number"
+                      value={heroData.estadisticas.atracciones}
+                      onChange={(e) =>
+                        setHeroData({
+                          ...heroData,
+                          estadisticas: {
+                            ...heroData.estadisticas,
+                            atracciones: parseInt(e.target.value) || 0,
+                          },
+                        })
+                      }
+                      min="0"
+                    />
+                  </div>
+                </div>
+              </div>
+              
               <Button
                 onClick={handleSaveHero}
                 disabled={saving}

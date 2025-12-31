@@ -23,6 +23,12 @@ interface HeroData {
   titulo: string;
   subtitulo: string;
   imagenes: string[];
+  estadisticas?: {
+    paises: number;
+    destinos: number;
+    aerolineas: number;
+    atracciones: number;
+  };
 }
 
 interface SiteConfig {
@@ -39,14 +45,20 @@ const defaultHeroData: HeroData = {
     "/images/head3.jpeg",
     "/images/head4.jpeg",
   ],
+  estadisticas: {
+    paises: 50,
+    destinos: 200,
+    aerolineas: 30,
+    atracciones: 500,
+  },
 };
 
 const defaultContactData: ContactData = {
-  email: "info@nortesurtravel.com",
-  phone: "+54 11 1234-5678",
+  email: "nortesurtravelweb@gmail.com",
+  phone: "+54 9 3512 39-9267",
   address: "Buenos Aires, Argentina",
   whatsapp: {
-    phoneNumber: "5491112345678",
+    phoneNumber: "5493512399267",
     defaultMessage:
       "¡Hola! Me interesa conocer más sobre sus servicios de viaje.",
   },
@@ -95,6 +107,7 @@ export function useSiteConfig() {
               titulo: data.hero?.titulo || defaultHeroData.titulo,
               subtitulo: data.hero?.subtitulo || defaultHeroData.subtitulo,
               imagenes: data.hero?.imagenes || defaultHeroData.imagenes,
+              estadisticas: data.hero?.estadisticas || defaultHeroData.estadisticas,
             },
           });
         }

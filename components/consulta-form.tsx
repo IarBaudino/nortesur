@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Send, Loader2, MessageCircle } from "lucide-react";
 import { useState } from "react";
-import { generateWhatsAppMessage, getWhatsAppUrl } from "@/lib/whatsapp";
+import { getWhatsAppUrl } from "@/lib/whatsapp";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { useContact } from "@/lib/hooks/use-site-config";
 import { Card } from "@/components/ui/card";
@@ -36,6 +36,7 @@ const consultaSchema = z.object({
   destino: z.string().optional(),
   fechaViaje: z.string().optional(),
   cantidadPersonas: z.string().optional(),
+  ciudadSalida: z.string().optional(),
   mensaje: z.string().min(10, "El mensaje debe tener al menos 10 caracteres"),
 });
 
@@ -45,6 +46,8 @@ export function ConsultaForm() {
   const { contactData } = useContact();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  
+  console.log("ConsultaForm renderizado");
 
   const form = useForm<ConsultaFormValues>({
     resolver: zodResolver(consultaSchema),
@@ -56,6 +59,7 @@ export function ConsultaForm() {
       destino: "",
       fechaViaje: "",
       cantidadPersonas: "",
+      ciudadSalida: "",
       mensaje: "",
     },
   });
@@ -63,15 +67,16 @@ export function ConsultaForm() {
   async function onSubmit(data: ConsultaFormValues) {
     setIsSubmitting(true);
     try {
-      // Generar mensaje para WhatsApp
-      const mensaje = generateWhatsAppMessage(data);
-      const whatsappUrl = getWhatsAppUrl(
-        contactData.whatsapp.phoneNumber,
-        mensaje
-      );
+      // Guardar consulta en Firebase
+      const { collection, addDoc, Timestamp } = await import("firebase/firestore");
+      const { db } = await import("@/lib/firebase/config");
+      const { COLLECTIONS } = await import("@/lib/firebase/collections");
 
-      // Abrir WhatsApp
-      window.open(whatsappUrl, "_blank");
+      await addDoc(collection(db, COLLECTIONS.CONSULTAS), {
+        ...data,
+        leida: false,
+        createdAt: Timestamp.now(),
+      });
 
       setIsSuccess(true);
       form.reset();
@@ -79,7 +84,8 @@ export function ConsultaForm() {
       // Ocultar mensaje de éxito después de 5 segundos
       setTimeout(() => setIsSuccess(false), 5000);
     } catch (error) {
-      console.error("Error al enviar formulario:", error);
+      console.error("Error al enviar la consulta:", error);
+      alert("Hubo un error al enviar la consulta. Por favor, intenta nuevamente.");
     } finally {
       setIsSubmitting(false);
     }
@@ -122,9 +128,9 @@ export function ConsultaForm() {
             ></div>
             {isSuccess && (
               <div className="mb-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl text-green-800 shadow-lg">
-                <p className="font-bold text-lg mb-2">¡Redirigiendo a WhatsApp!</p>
+                <p className="font-bold text-lg mb-2">¡Consulta enviada exitosamente!</p>
                 <p className="text-base">
-                  Se abrirá WhatsApp con tu consulta prellenada.
+                  Tu consulta ha sido recibida correctamente. Te contactaremos pronto.
                 </p>
               </div>
             )}
@@ -134,16 +140,44 @@ export function ConsultaForm() {
               <p className="text-base font-semibold mb-4" style={{ color: "#033671" }}>
                 ¿Prefieres escribir directamente?
               </p>
-              <WhatsAppButton
-                phoneNumber={contactData.whatsapp.phoneNumber}
-                message={contactData.whatsapp.defaultMessage}
+              <Button
+                onClick={() => {
+                  // Mensaje template con todos los campos vacíos para que el cliente complete en WhatsApp
+                  const mensajeTemplate = `■ Formulario para tu viaje
+■ Nortesur Travel – Asesoría personalizada en viajes
+
+¡Hola! Me interesa realizar una consulta:
+
+Nombre:
+Email: 
+Teléfono: 
+Tipo de consulta: 
+Destino:
+Fecha de viaje:
+Cantidad de personas: 
+Ciudad de salida:`;
+
+                  const whatsappUrl = getWhatsAppUrl("+5493512399267", mensajeTemplate);
+                  window.open(whatsappUrl, "_blank");
+                }}
                 size="lg"
-              />
+                className="hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: "#25D366", color: "#ffffff" }}
+              >
+                <MessageCircle className="mr-2 h-4 w-4" />
+                Contactate con un asesor
+              </Button>
             </div>
 
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(
+                  onSubmit,
+                  (errors) => {
+                    console.error("❌ ERRORES DE VALIDACIÓN:", errors);
+                    console.error("Formulario no válido, no se ejecuta onSubmit");
+                  }
+                )}
                 className="space-y-6"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -289,6 +323,24 @@ export function ConsultaForm() {
                             type="number"
                             placeholder="2"
                             min="1"
+                            {...field}
+                            style={{ backgroundColor: "#ffffff" }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="ciudadSalida"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Ciudad de salida</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Ej: Buenos Aires, Córdoba"
                             {...field}
                             style={{ backgroundColor: "#ffffff" }}
                           />

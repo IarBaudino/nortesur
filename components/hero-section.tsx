@@ -22,6 +22,12 @@ function useHero() {
         "/images/head3.jpeg",
         "/images/head4.jpeg",
       ],
+      estadisticas: config.hero?.estadisticas || {
+        paises: 50,
+        destinos: 200,
+        aerolineas: 30,
+        atracciones: 500,
+      },
     },
     loading,
   };
@@ -208,6 +214,43 @@ export function HeroSection() {
             </Button>
           </motion.div>
         </div>
+
+        {/* Estadísticas */}
+        {heroData.estadisticas && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mt-16 md:mt-20"
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-4xl mx-auto">
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-white/20 text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">
+                  {heroData.estadisticas.paises}+
+                </div>
+                <div className="text-sm md:text-base text-white/90">Países</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-white/20 text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">
+                  {heroData.estadisticas.destinos}+
+                </div>
+                <div className="text-sm md:text-base text-white/90">Destinos</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-white/20 text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">
+                  {heroData.estadisticas.aerolineas}+
+                </div>
+                <div className="text-sm md:text-base text-white/90">Aerolíneas</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-white/20 text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">
+                  {heroData.estadisticas.atracciones}+
+                </div>
+                <div className="text-sm md:text-base text-white/90">Atracciones</div>
+              </div>
+            </div>
+          </motion.div>
+        )}
       </div>
     </section>
   );

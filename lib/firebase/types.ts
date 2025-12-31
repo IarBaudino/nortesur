@@ -68,6 +68,12 @@ export interface SiteContent {
     titulo: string;
     subtitulo: string;
     imagenes: string[];
+    estadisticas?: {
+      paises: number;
+      destinos: number;
+      aerolineas: number;
+      atracciones: number;
+    };
   };
 }
 
@@ -78,4 +84,19 @@ export interface AboutContent {
   vision: string;
   foto: string;
   diploma: string;
+}
+
+export interface Consulta {
+  id: string;
+  nombre: string;
+  email: string;
+  telefono: string;
+  tipoConsulta: string;
+  destino?: string;
+  fechaViaje?: string;
+  cantidadPersonas?: string;
+  ciudadSalida?: string;
+  mensaje: string;
+  leida: boolean;
+  createdAt: Date;
 }

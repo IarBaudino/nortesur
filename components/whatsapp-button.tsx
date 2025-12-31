@@ -37,7 +37,7 @@ export function WhatsAppButton({
       }
     >
       <MessageCircle className="mr-2 h-4 w-4" />
-      Escribir por WhatsApp
+      Contactate con un asesor
     </Button>
   );
 }

@@ -6,6 +6,7 @@ export const COLLECTIONS = {
   EMPRESAS: "empresas",
   CONFIG: "config",
   ABOUT: "about",
+  CONSULTAS: "consultas",
 } as const;
 
 

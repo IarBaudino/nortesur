@@ -21,12 +21,8 @@ export function EmpresasAsociadasSection() {
     );
   }
 
-  if (empresas.length === 0) {
-    return null;
-  }
-
   // Duplicar empresas para efecto infinito
-  const empresasDuplicadas = [...empresas, ...empresas];
+  const empresasDuplicadas = empresas.length > 0 ? [...empresas, ...empresas] : [];
 
   return (
     <section className="py-20 overflow-hidden relative" style={{ backgroundColor: "#D9DEE4" }}>
@@ -51,9 +47,10 @@ export function EmpresasAsociadasSection() {
         </motion.div>
 
         <div className="max-w-6xl mx-auto overflow-hidden">
-          <div className="relative">
-            <div className="flex animate-scroll-continuous gap-4">
-              {empresasDuplicadas.map((empresa, index) => {
+          <div className="relative py-8">
+            {empresasDuplicadas.length > 0 ? (
+              <div className="flex animate-scroll-continuous gap-4">
+                {empresasDuplicadas.map((empresa, index) => {
                 const hasUrl = empresa.url && empresa.url.trim() !== "";
                 const wrapperProps = hasUrl
                   ? {
@@ -66,7 +63,7 @@ export function EmpresasAsociadasSection() {
                 return (
                   <div
                     key={`${empresa.id}-${index}`}
-                    className="flex-shrink-0 w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.67rem)] lg:w-[calc(25%-0.75rem)]"
+                    className="flex-shrink-0 w-48 md:w-56 lg:w-64"
                   >
                     {hasUrl ? (
                       <Card className="relative aspect-[3/2] rounded-xl border-2 flex items-center justify-center p-6 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105 group overflow-hidden border-gray-200 hover:border-[#6D4C05]">
@@ -75,13 +72,13 @@ export function EmpresasAsociadasSection() {
                           className="absolute inset-0 z-10"
                           aria-label={empresa.nombre}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#6D4C05]/0 to-[#6D4C05]/0 group-hover:from-[#6D4C05]/5 group-hover:to-[#033671]/5 transition-all duration-300"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#6D4C05]/0 to-[#6D4C05]/0 group-hover:from-[#6D4C05]/5 group-hover:to-[#033671]/5 transition-all duration-300 z-0"></div>
                         <Image
                           src={empresa.logo}
                           alt={empresa.nombre}
                           fill
                           sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          className="object-contain p-4 transition-transform duration-300 group-hover:scale-110 relative z-0"
+                          className="object-contain p-4 transition-transform duration-300 group-hover:scale-110 z-10"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.style.display = "none";
@@ -90,13 +87,13 @@ export function EmpresasAsociadasSection() {
                       </Card>
                     ) : (
                       <Card className="relative aspect-[3/2] rounded-xl border-2 flex items-center justify-center p-6 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105 group overflow-hidden border-gray-200 hover:border-[#6D4C05]">
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#6D4C05]/0 to-[#6D4C05]/0 group-hover:from-[#6D4C05]/5 group-hover:to-[#033671]/5 transition-all duration-300"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#6D4C05]/0 to-[#6D4C05]/0 group-hover:from-[#6D4C05]/5 group-hover:to-[#033671]/5 transition-all duration-300 z-0"></div>
                         <Image
                           src={empresa.logo}
                           alt={empresa.nombre}
                           fill
                           sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          className="object-contain p-4 transition-transform duration-300 group-hover:scale-110 relative z-0"
+                          className="object-contain p-4 transition-transform duration-300 group-hover:scale-110 z-10"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.style.display = "none";
@@ -107,7 +104,14 @@ export function EmpresasAsociadasSection() {
                   </div>
                 );
               })}
-            </div>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-lg" style={{ color: "#2E486B" }}>
+                  No hay empresas asociadas disponibles en este momento.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

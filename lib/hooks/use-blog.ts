@@ -13,25 +13,55 @@ export function useBlog() {
   useEffect(() => {
     async function fetchBlog() {
       try {
+        // Primero obtener todos los posts y filtrar en el cliente
+        // Esto evita la necesidad de un índice compuesto
         const q = query(
           collection(db, COLLECTIONS.BLOG),
-          where("publicado", "==", true),
           orderBy("fechaPublicacion", "desc")
         );
         const querySnapshot = await getDocs(q);
         const postsData: BlogPost[] = [];
         querySnapshot.forEach((doc) => {
-          postsData.push({
-            id: doc.id,
-            ...doc.data(),
-            fechaPublicacion: doc.data().fechaPublicacion?.toDate() || new Date(),
-            createdAt: doc.data().createdAt?.toDate() || new Date(),
-            updatedAt: doc.data().updatedAt?.toDate() || new Date(),
-          } as BlogPost);
+          const data = doc.data();
+          // Filtrar solo los publicados en el cliente
+          if (data.publicado === true) {
+            postsData.push({
+              id: doc.id,
+              ...data,
+              fechaPublicacion: data.fechaPublicacion?.toDate() || new Date(),
+              createdAt: data.createdAt?.toDate() || new Date(),
+              updatedAt: data.updatedAt?.toDate() || new Date(),
+            } as BlogPost);
+          }
         });
         setPosts(postsData);
       } catch (error) {
         console.error("Error fetching blog:", error);
+        // Si falla, intentar sin orderBy
+        try {
+          const q = query(collection(db, COLLECTIONS.BLOG));
+          const querySnapshot = await getDocs(q);
+          const postsData: BlogPost[] = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.publicado === true) {
+              postsData.push({
+                id: doc.id,
+                ...data,
+                fechaPublicacion: data.fechaPublicacion?.toDate() || new Date(),
+                createdAt: data.createdAt?.toDate() || new Date(),
+                updatedAt: data.updatedAt?.toDate() || new Date(),
+              } as BlogPost);
+            }
+          });
+          // Ordenar en el cliente
+          postsData.sort((a, b) => 
+            b.fechaPublicacion.getTime() - a.fechaPublicacion.getTime()
+          );
+          setPosts(postsData);
+        } catch (fallbackError) {
+          console.error("Error en fallback:", fallbackError);
+        }
       } finally {
         setLoading(false);
       }
