@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { Trash2, Edit, Plus, Loader2 } from "lucide-react";
 import {
   Dialog,
@@ -190,12 +191,20 @@ export function BlogManager() {
                 />
               </div>
               <div>
-                <Label>Slug</Label>
+                <Label>Slug (URL del post)</Label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Se genera automáticamente desde el título. Ejemplo: "Mi Viaje a París" → "mi-viaje-a-paris"
+                </p>
                 <Input
                   value={formData.slug}
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  required
+                  placeholder="url-del-post"
                 />
+                {formData.slug && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    URL: <span className="font-mono">/blog/{formData.slug}</span>
+                  </p>
+                )}
               </div>
               <div>
                 <Label>Resumen</Label>
@@ -215,10 +224,11 @@ export function BlogManager() {
                 />
               </div>
               <div>
-                <Label>URL de Imagen (opcional)</Label>
-                <Input
+                <ImageUpload
                   value={formData.imagen}
-                  onChange={(e) => setFormData({ ...formData, imagen: e.target.value })}
+                  onChange={(url) => setFormData({ ...formData, imagen: url })}
+                  folder="blog"
+                  label="Imagen del Post (opcional)"
                 />
               </div>
               <div>

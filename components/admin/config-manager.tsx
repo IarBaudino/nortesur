@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Save } from "lucide-react";
 import { useSiteConfig } from "@/lib/hooks/use-site-config";
@@ -232,17 +233,21 @@ export function ConfigManager() {
                 />
               </div>
               <div>
-                <Label>URL de Foto</Label>
-                <Input
+                <Label>Foto</Label>
+                <ImageUpload
                   value={aboutData.foto}
-                  onChange={(e) => setAboutData({ ...aboutData, foto: e.target.value })}
+                  onChange={(url) => setAboutData({ ...aboutData, foto: url })}
+                  folder="about"
+                  label="Foto"
                 />
               </div>
               <div>
-                <Label>URL de Diploma</Label>
-                <Input
+                <Label>Diploma</Label>
+                <ImageUpload
                   value={aboutData.diploma}
-                  onChange={(e) => setAboutData({ ...aboutData, diploma: e.target.value })}
+                  onChange={(url) => setAboutData({ ...aboutData, diploma: url })}
+                  folder="about"
+                  label="Diploma"
                 />
               </div>
               <Button
@@ -289,19 +294,21 @@ export function ConfigManager() {
               <div>
                 <Label>Imágenes del Hero</Label>
                 {heroData.imagenes.map((imagen, index) => (
-                  <div key={index} className="flex gap-2 mb-2">
-                    <Input
+                  <div key={index} className="mb-4 space-y-2">
+                    <ImageUpload
                       value={imagen}
-                      onChange={(e) => updateHeroImage(index, e.target.value)}
-                      placeholder={`URL de imagen ${index + 1}`}
+                      onChange={(url) => updateHeroImage(index, url)}
+                      folder="hero"
+                      label={`Imagen ${index + 1}`}
                     />
                     {heroData.imagenes.length > 1 && (
                       <Button
                         type="button"
                         variant="outline"
                         onClick={() => removeHeroImage(index)}
+                        className="w-full"
                       >
-                        Eliminar
+                        Eliminar Imagen
                       </Button>
                     )}
                   </div>

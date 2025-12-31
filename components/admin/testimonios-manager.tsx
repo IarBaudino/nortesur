@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { Trash2, Edit, Plus, Loader2 } from "lucide-react";
 import {
   Dialog,
@@ -172,10 +173,11 @@ export function TestimoniosManager() {
                 />
               </div>
               <div>
-                <Label>URL de Foto (opcional)</Label>
-                <Input
+                <ImageUpload
                   value={formData.foto}
-                  onChange={(e) => setFormData({ ...formData, foto: e.target.value })}
+                  onChange={(url) => setFormData({ ...formData, foto: url })}
+                  folder="testimonios"
+                  label="Foto (opcional)"
                 />
               </div>
               <div className="flex gap-2 justify-end">

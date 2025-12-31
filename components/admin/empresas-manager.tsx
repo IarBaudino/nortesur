@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { Trash2, Edit, Plus, Loader2 } from "lucide-react";
 import {
   Dialog,
@@ -143,22 +144,12 @@ export function EmpresasManager() {
                 />
               </div>
               <div>
-                <Label>URL del Logo</Label>
-                <Input
+                <Label>Logo</Label>
+                <ImageUpload
                   value={formData.logo}
-                  onChange={(e) => setFormData({ ...formData, logo: e.target.value })}
-                  required
+                  onChange={(url) => setFormData({ ...formData, logo: url })}
+                  folder="empresas"
                 />
-                {formData.logo && (
-                  <img
-                    src={formData.logo}
-                    alt="Preview"
-                    className="mt-2 w-full h-32 object-contain rounded"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
-                  />
-                )}
               </div>
               <div>
                 <Label>URL (opcional)</Label>
