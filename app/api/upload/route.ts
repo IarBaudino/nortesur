@@ -23,31 +23,38 @@ export async function POST(request: NextRequest) {
     const dataURI = `data:${file.type};base64,${base64}`;
 
     // Subir a Cloudinary
-    const uploadOptions: any = {
-      resource_type: "auto", // Detecta automáticamente si es imagen, video, etc.
+    interface CloudinaryResult {
+      secure_url: string;
+      public_id: string;
+    }
+
+    const uploadOptions = {
+      resource_type: "auto" as const, // Detecta automáticamente si es imagen, video, etc.
       folder: folder || "nortesur", // Carpeta en Cloudinary
     };
 
-    const result = await new Promise((resolve, reject) => {
+    const result = await new Promise<CloudinaryResult>((resolve, reject) => {
       cloudinary.uploader.upload(
         dataURI,
         uploadOptions,
-        (error: any, result: any) => {
+        (error: unknown, result: CloudinaryResult | undefined) => {
           if (error) reject(error);
-          else resolve(result);
+          else if (result) resolve(result);
+          else reject(new Error("No result from Cloudinary"));
         }
       );
     });
 
     return NextResponse.json({
       success: true,
-      url: (result as any).secure_url,
-      public_id: (result as any).public_id,
+      url: result.secure_url,
+      public_id: result.public_id,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error uploading to Cloudinary:", error);
+    const errorMessage = error instanceof Error ? error.message : "Error al subir la imagen";
     return NextResponse.json(
-      { error: error.message || "Error al subir la imagen" },
+      { error: errorMessage },
       { status: 500 }
     );
   }

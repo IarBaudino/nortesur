@@ -74,7 +74,7 @@ export function TestimoniosSection() {
                     </div>
                     
                     <p className="text-lg mb-8 leading-relaxed relative z-10" style={{ color: "#2E486B" }}>
-                      "{testimonio.mensaje}"
+                      &quot;{testimonio.mensaje}&quot;
                     </p>
                     
                     <div className="pt-6 border-t border-gray-100">

@@ -193,7 +193,7 @@ export function BlogManager() {
               <div>
                 <Label>Slug (URL del post)</Label>
                 <p className="text-xs text-gray-500 mb-2">
-                  Se genera automáticamente desde el título. Ejemplo: "Mi Viaje a París" → "mi-viaje-a-paris"
+                  Se genera automáticamente desde el título. Ejemplo: &quot;Mi Viaje a París&quot; → &quot;mi-viaje-a-paris&quot;
                 </p>
                 <Input
                   value={formData.slug}

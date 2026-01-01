@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, updateDoc, deleteDoc, doc, getDocs, query, orderBy, onSnapshot } from "firebase/firestore";
+import { collection, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { COLLECTIONS } from "@/lib/firebase/collections";
 import type { Consulta } from "@/lib/firebase/types";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trash2, Mail, Phone, Calendar, Users, MessageCircle, CheckCircle2, Circle } from "lucide-react";
 import {
@@ -288,10 +288,27 @@ export function ConsultasManager() {
                 </Button>
                 <Button
                   onClick={() => {
-                    window.location.href = `https://wa.me/5493512399267?text=Hola ${selectedConsulta.nombre}`;
+                    if (!selectedConsulta.telefono || selectedConsulta.telefono.trim() === "") {
+                      alert("Esta consulta no tiene número de teléfono");
+                      return;
+                    }
+                    // Limpiar el número de teléfono (remover espacios, guiones, paréntesis, etc.)
+                    const cleanPhone = selectedConsulta.telefono.replace(/[^\d+]/g, "");
+                    // Si no empieza con +, agregar código de país de Argentina por defecto
+                    const phoneNumber = cleanPhone.startsWith("+") 
+                      ? cleanPhone.substring(1) 
+                      : cleanPhone.startsWith("54") 
+                        ? cleanPhone 
+                        : `54${cleanPhone}`;
+                    // Crear mensaje para el admin
+                    const message = encodeURIComponent(
+                      `Hola ${selectedConsulta.nombre}, te contactamos desde Nortesur Travel respecto a tu consulta sobre ${tipoConsultaMap[selectedConsulta.tipoConsulta] || selectedConsulta.tipoConsulta}${selectedConsulta.destino ? ` a ${selectedConsulta.destino}` : ""}.`
+                    );
+                    window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
                   }}
                   className="flex-1"
                   style={{ backgroundColor: "#25D366", color: "#ffffff" }}
+                  disabled={!selectedConsulta.telefono || selectedConsulta.telefono.trim() === ""}
                 >
                   <MessageCircle className="mr-2 h-4 w-4" />
                   Contactar por WhatsApp

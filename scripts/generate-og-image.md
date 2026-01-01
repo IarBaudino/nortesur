@@ -29,3 +29,4 @@ Puedes usar una de las imágenes del hero (`head1.jpg`, `head2.jpg`, etc.) y red
 ## Nota:
 Mientras no tengas la imagen, el sitio funcionará correctamente, pero las redes sociales mostrarán una imagen por defecto o ninguna imagen al compartir el sitio.
 
+

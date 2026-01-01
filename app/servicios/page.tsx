@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, ArrowLeft, MessageCircle, X } from "lucide-react";
+import { Loader2, ArrowLeft, MessageCircle } from "lucide-react";
 
 export default function ServiciosPage() {
   const { flyers, loading } = useFlyers();

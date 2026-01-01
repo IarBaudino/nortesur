@@ -2,6 +2,9 @@
 
 Este documento explica cómo configurar el envío de emails para las consultas del formulario.
 
+> ⚠️ **¿No puedes usar contraseñas de aplicación de Gmail?** 
+> Ve a [EMAIL_SETUP_ALTERNATIVO.md](./EMAIL_SETUP_ALTERNATIVO.md) para opciones más fáciles como Resend o SendGrid.
+
 ## 🔧 Configuración de Gmail
 
 Para que el sistema pueda enviar emails, necesitas crear una **"Contraseña de aplicación"** en tu cuenta de Gmail.
@@ -54,8 +57,20 @@ npm run dev
 
 1. Completa el formulario de consulta en: http://localhost:3000/#consulta
 2. Envía el formulario
-3. Deberías recibir un email en `nortesurtravelweb@gmail.com` con los datos de la consulta
-4. También se abrirá WhatsApp con el mensaje prellenado
+3. **Automáticamente recibirás un email** en `EMAIL_TO` con todos los datos de la consulta
+4. La consulta también se guarda en el panel de administración
+
+## 📧 Notificaciones Automáticas
+
+Una vez configurado el email, **cada vez que un cliente envíe una consulta desde el formulario**, recibirás automáticamente un email con:
+
+- Nombre, email y teléfono del cliente
+- Tipo de consulta
+- Destino, fecha de viaje, cantidad de personas
+- Mensaje completo
+- Fecha y hora de la consulta
+
+**Ventaja:** Puedes responder directamente al email (Reply) y tu respuesta llegará al email del cliente.
 
 ## 🔍 Solución de Problemas
 

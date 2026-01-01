@@ -26,14 +26,17 @@ export function useAbout() {
         const aboutSnap = await getDoc(aboutRef);
 
         if (aboutSnap.exists()) {
-          const data = aboutSnap.data() as Partial<AboutContent>;
+          const data = aboutSnap.data() as Partial<AboutContent> & { 
+            misionVision?: string; 
+            bio?: string; 
+          };
           
           // Manejar migración de misionVision a mision y vision separados
           let mision = data.mision || "";
           let vision = data.vision || "";
           
+          // Si existe misionVision (campo antiguo) pero no mision ni vision, separar
           if (data.misionVision && !mision && !vision) {
-            // Si existe misionVision pero no mision ni vision, separar
             const visionIndex = data.misionVision.indexOf("Visión");
             if (visionIndex !== -1) {
               mision = data.misionVision.substring(0, visionIndex).replace(/^Misión\s*/i, "").trim();

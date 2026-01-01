@@ -70,9 +70,10 @@ export function ImageUpload({
 
       onChange(data.url);
       setPreview(data.url);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error uploading image:", error);
-      alert(error.message || "Error al subir la imagen");
+      const errorMessage = error instanceof Error ? error.message : "Error al subir la imagen";
+      alert(errorMessage);
       setPreview(null);
     } finally {
       setUploading(false);
@@ -174,7 +175,7 @@ export function ImageUpload({
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
           <ImageIcon className="h-12 w-12 mx-auto text-gray-400 mb-2" />
           <p className="text-sm text-gray-500">
-            Haz clic en "Subir Imagen" o ingresa una URL
+            Haz clic en &quot;Subir Imagen&quot; o ingresa una URL
           </p>
         </div>
       )}

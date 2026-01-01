@@ -208,7 +208,7 @@ export function TestimoniosManager() {
                 {testimonio.destino}
               </p>
               <p className="text-sm mb-4" style={{ color: "#2E486B" }}>
-                "{testimonio.mensaje}"
+                &quot;{testimonio.mensaje}&quot;
               </p>
               <p className="text-sm mb-4" style={{ color: "#6D4C05" }}>
                 ⭐ {testimonio.calificacion}/5

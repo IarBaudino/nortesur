@@ -68,10 +68,10 @@ export function generateWhatsAppMessage(data: ConsultaFormData): string {
       });
       mensaje += `*Fecha de viaje:* ${fechaFormateada}\n`;
       console.log("Agregado fechaViaje:", fechaFormateada);
-    } catch (e) {
-      mensaje += `*Fecha de viaje:* ${data.fechaViaje}\n`;
-      console.log("Agregado fechaViaje (sin formatear):", data.fechaViaje);
-    }
+      } catch {
+        mensaje += `*Fecha de viaje:* ${data.fechaViaje}\n`;
+        console.log("Agregado fechaViaje (sin formatear):", data.fechaViaje);
+      }
   }
 
   // Cantidad de personas (opcional)

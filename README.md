@@ -122,6 +122,15 @@ El sitio utiliza una paleta de colores personalizada para Nortesur Travel:
 - `npm run start` - Inicia el servidor de producción
 - `npm run lint` - Ejecuta el linter para verificar errores
 
+## 📚 Documentación
+
+- **[Manual de Usuario](./docs/MANUAL_USUARIO.md)** - Guía completa para usar el panel de administración
+- **[Deploy en Vercel](./docs/DEPLOY_VERCEL.md)** - Guía paso a paso para desplegar el sitio
+- **[Configuración de Firebase](./docs/FIREBASE_SETUP.md)** - Instrucciones para configurar Firebase
+- **[Configuración de Email](./docs/EMAIL_SETUP.md)** - Configurar notificaciones por email (Gmail)
+- **[Configuración de Email Alternativa](./docs/EMAIL_SETUP_ALTERNATIVO.md)** - Configurar con Resend (más fácil)
+- **[Configuración de Imagen Open Graph](./docs/OG_IMAGE_SETUP.md)** - Cómo crear la imagen para redes sociales
+
 ## 📁 Estructura del Proyecto
 
 ```

@@ -25,7 +25,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ email: string | null } | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -42,8 +42,9 @@ export default function AdminPage() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (err: any) {
-      setError(err.message || "Error al iniciar sesión");
+    } catch (err: unknown) {
+      const error = err as { message?: string };
+      setError(error.message || "Error al iniciar sesión");
     } finally {
       setLoading(false);
     }
@@ -52,7 +53,7 @@ export default function AdminPage() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error al cerrar sesión:", err);
     }
   };

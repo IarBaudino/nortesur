@@ -78,6 +78,20 @@ export function ConsultaForm() {
         createdAt: Timestamp.now(),
       });
 
+      // Enviar notificación por email (no bloquea si falla)
+      try {
+        await fetch("/api/notify-consulta", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+      } catch (emailError) {
+        // No mostrar error al usuario, la consulta ya está guardada
+        console.error("Error enviando notificación:", emailError);
+      }
+
       setIsSuccess(true);
       form.reset();
 
@@ -301,10 +315,15 @@ Ciudad de salida:`;
                       <FormItem>
                         <FormLabel>Fecha de viaje</FormLabel>
                         <FormControl>
-                          <Input
+                          <input
                             type="date"
-                            {...field}
-                            style={{ backgroundColor: "#ffffff" }}
+                            value={field.value || ""}
+                            onChange={(e) => field.onChange(e.target.value)}
+                            onBlur={field.onBlur}
+                            name={field.name}
+                            ref={field.ref}
+                            className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                            style={{ backgroundColor: "#ffffff", cursor: "pointer" }}
                           />
                         </FormControl>
                         <FormMessage />

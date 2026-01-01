@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const postsRef = doc(db, COLLECTIONS.BLOG, slug);
     const postSnap = await getDoc(postsRef);
     
-    let postData: any = null;
+    let postData: { titulo?: string; resumen?: string; contenido?: string; imagen?: string; fechaPublicacion?: { toDate?: () => Date }; publicado?: boolean } | null = null;
     
     if (postSnap.exists()) {
       postData = postSnap.data();
