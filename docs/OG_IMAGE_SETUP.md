@@ -58,3 +58,5 @@ convert public/images/head1.jpg -resize 1200x630^ -gravity center -extent 1200x6
 Mientras no tengas la imagen, el sitio funcionará correctamente, pero las redes sociales mostrarán una imagen por defecto o ninguna imagen al compartir el sitio. Es recomendable crear la imagen antes de hacer el deploy a producción.
 
 
+
+

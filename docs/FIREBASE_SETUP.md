@@ -54,13 +54,20 @@ const firebaseConfig = {
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Permitir lectura pública (cualquiera puede leer)
+    // Permitir lectura pública de todas las colecciones
     match /{document=**} {
       allow read: if true;
     }
 
-    // Solo permitir escritura a usuarios autenticados
-    match /{document=**} {
+    // Colección de consultas: permitir escritura pública (para el formulario)
+    // pero solo lectura/edición/eliminación para usuarios autenticados
+    match /consultas/{consultaId} {
+      allow create: if true; // Cualquiera puede crear consultas (formulario público)
+      allow read, update, delete: if request.auth != null; // Solo admin puede leer/editar/eliminar
+    }
+
+    // Todas las demás colecciones: solo escritura para usuarios autenticados
+    match /{collection}/{document=**} {
       allow write: if request.auth != null;
     }
   }
@@ -68,6 +75,8 @@ service cloud.firestore {
 ```
 
 3. Haz clic en **"Publicar"**
+
+> ⚠️ **Importante:** Estas reglas permiten que cualquier persona pueda enviar consultas a través del formulario, pero solo los usuarios autenticados (admin) pueden leer, editar o eliminar consultas.
 
 ## 👤 Paso 5: Habilitar Authentication
 

@@ -46,7 +46,7 @@ export function ConsultaForm() {
   const { contactData } = useContact();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  
+
   console.log("ConsultaForm renderizado");
 
   const form = useForm<ConsultaFormValues>({
@@ -68,7 +68,9 @@ export function ConsultaForm() {
     setIsSubmitting(true);
     try {
       // Guardar consulta en Firebase
-      const { collection, addDoc, Timestamp } = await import("firebase/firestore");
+      const { collection, addDoc, Timestamp } = await import(
+        "firebase/firestore"
+      );
       const { db } = await import("@/lib/firebase/config");
       const { COLLECTIONS } = await import("@/lib/firebase/collections");
 
@@ -99,7 +101,9 @@ export function ConsultaForm() {
       setTimeout(() => setIsSuccess(false), 5000);
     } catch (error) {
       console.error("Error al enviar la consulta:", error);
-      alert("Hubo un error al enviar la consulta. Por favor, intenta nuevamente.");
+      alert(
+        "Hubo un error al enviar la consulta. Por favor, intenta nuevamente."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -121,37 +125,47 @@ export function ConsultaForm() {
             <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-[#033671] to-[#2E486B] bg-clip-text text-transparent">
               Consulta tu Viaje
             </h2>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto" style={{ color: "#2E486B" }}>
-              Completa el formulario y te contactaremos con la mejor propuesta personalizada para ti
+            <p
+              className="text-lg md:text-xl max-w-2xl mx-auto"
+              style={{ color: "#2E486B" }}
+            >
+              Completa el formulario y te contactaremos con la mejor propuesta
+              personalizada para ti
             </p>
           </div>
 
           <Card className="p-10 md:p-14 relative overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300">
             {/* Decoración con acento dorado mejorada */}
             <div
-              className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-10"
+              className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-10 pointer-events-none"
               style={{ backgroundColor: "#6D4C05" }}
             ></div>
             <div
-              className="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-2xl opacity-10"
+              className="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-2xl opacity-10 pointer-events-none"
               style={{ backgroundColor: "#033671" }}
             ></div>
             <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-5"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-5 pointer-events-none"
               style={{ backgroundColor: "#6D4C05" }}
             ></div>
             {isSuccess && (
               <div className="mb-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl text-green-800 shadow-lg">
-                <p className="font-bold text-lg mb-2">¡Consulta enviada exitosamente!</p>
+                <p className="font-bold text-lg mb-2">
+                  ¡Consulta enviada exitosamente!
+                </p>
                 <p className="text-base">
-                  Tu consulta ha sido recibida correctamente. Te contactaremos pronto.
+                  Tu consulta ha sido recibida correctamente. Te contactaremos
+                  pronto.
                 </p>
               </div>
             )}
 
             {/* Botón de WhatsApp directo */}
-            <div className="mb-8 text-center p-6 rounded-xl bg-gradient-to-br from-[#033671]/5 to-[#6D4C05]/5 border-2 border-[#6D4C05]/20">
-              <p className="text-base font-semibold mb-4" style={{ color: "#033671" }}>
+            <div className="mb-6 md:mb-8 text-center p-4 md:p-6 rounded-xl bg-gradient-to-br from-[#033671]/5 to-[#6D4C05]/5 border-2 border-[#6D4C05]/20">
+              <p
+                className="text-sm md:text-base font-semibold mb-3 md:mb-4"
+                style={{ color: "#033671" }}
+              >
                 ¿Prefieres escribir directamente?
               </p>
               <Button
@@ -171,11 +185,14 @@ Fecha de viaje:
 Cantidad de personas: 
 Ciudad de salida:`;
 
-                  const whatsappUrl = getWhatsAppUrl("+5493512399267", mensajeTemplate);
+                  const whatsappUrl = getWhatsAppUrl(
+                    "+5493512399267",
+                    mensajeTemplate
+                  );
                   window.open(whatsappUrl, "_blank");
                 }}
                 size="lg"
-                className="hover:opacity-90 transition-opacity"
+                className="w-full md:w-auto hover:opacity-90 transition-opacity text-sm md:text-base px-4 md:px-6"
                 style={{ backgroundColor: "#25D366", color: "#ffffff" }}
               >
                 <MessageCircle className="mr-2 h-4 w-4" />
@@ -185,14 +202,11 @@ Ciudad de salida:`;
 
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(
-                  onSubmit,
-                  (errors) => {
-                    console.error("❌ ERRORES DE VALIDACIÓN:", errors);
-                    console.error("Formulario no válido, no se ejecuta onSubmit");
-                  }
-                )}
-                className="space-y-6"
+                onSubmit={form.handleSubmit(onSubmit, (errors) => {
+                  console.error("❌ ERRORES DE VALIDACIÓN:", errors);
+                  console.error("Formulario no válido, no se ejecuta onSubmit");
+                })}
+                className="space-y-6 relative z-10"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
@@ -203,9 +217,18 @@ Ciudad de salida:`;
                         <FormLabel>Nombre completo *</FormLabel>
                         <FormControl>
                           <Input
+                            type="text"
+                            inputMode="text"
+                            autoComplete="name"
                             placeholder="Juan Pérez"
                             {...field}
-                            style={{ backgroundColor: "#ffffff" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              fontSize: "16px",
+                              minHeight: "44px",
+                              position: "relative",
+                              zIndex: 1,
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -222,9 +245,17 @@ Ciudad de salida:`;
                         <FormControl>
                           <Input
                             type="email"
+                            inputMode="email"
+                            autoComplete="email"
                             placeholder="juan@example.com"
                             {...field}
-                            style={{ backgroundColor: "#ffffff" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              fontSize: "16px",
+                              minHeight: "44px",
+                              position: "relative",
+                              zIndex: 1,
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -243,9 +274,17 @@ Ciudad de salida:`;
                         <FormControl>
                           <Input
                             type="tel"
+                            inputMode="tel"
+                            autoComplete="tel"
                             placeholder="+54 11 1234-5678"
                             {...field}
-                            style={{ backgroundColor: "#ffffff" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              fontSize: "16px",
+                              minHeight: "44px",
+                              position: "relative",
+                              zIndex: 1,
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -264,11 +303,18 @@ Ciudad de salida:`;
                           defaultValue={field.value}
                         >
                           <FormControl>
-                            <SelectTrigger className="bg-white">
+                            <SelectTrigger
+                              className="bg-white"
+                              style={{
+                                position: "relative",
+                                zIndex: 1,
+                                minHeight: "44px",
+                              }}
+                            >
                               <SelectValue placeholder="Selecciona una opción" />
                             </SelectTrigger>
                           </FormControl>
-                          <SelectContent>
+                          <SelectContent style={{ zIndex: 9999 }}>
                             <SelectItem value="paquete">
                               Paquete turístico
                             </SelectItem>
@@ -298,9 +344,18 @@ Ciudad de salida:`;
                         <FormLabel>Destino</FormLabel>
                         <FormControl>
                           <Input
+                            type="text"
+                            inputMode="text"
+                            autoComplete="off"
                             placeholder="Ej: París, Francia"
                             {...field}
-                            style={{ backgroundColor: "#ffffff" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              fontSize: "16px",
+                              minHeight: "44px",
+                              position: "relative",
+                              zIndex: 1,
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -315,15 +370,23 @@ Ciudad de salida:`;
                       <FormItem>
                         <FormLabel>Fecha de viaje</FormLabel>
                         <FormControl>
-                          <input
+                          <Input
                             type="date"
                             value={field.value || ""}
-                            onChange={(e) => field.onChange(e.target.value)}
+                            onChange={(e) => {
+                              field.onChange(e.target.value);
+                            }}
                             onBlur={field.onBlur}
                             name={field.name}
                             ref={field.ref}
-                            className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-                            style={{ backgroundColor: "#ffffff", cursor: "pointer" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              cursor: "pointer",
+                              fontSize: "16px",
+                              minHeight: "44px",
+                              position: "relative",
+                              zIndex: 1,
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -340,10 +403,17 @@ Ciudad de salida:`;
                         <FormControl>
                           <Input
                             type="number"
+                            inputMode="numeric"
                             placeholder="2"
                             min="1"
                             {...field}
-                            style={{ backgroundColor: "#ffffff" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              fontSize: "16px",
+                              minHeight: "44px",
+                              position: "relative",
+                              zIndex: 1,
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -359,9 +429,18 @@ Ciudad de salida:`;
                         <FormLabel>Ciudad de salida</FormLabel>
                         <FormControl>
                           <Input
+                            type="text"
+                            inputMode="text"
+                            autoComplete="off"
                             placeholder="Ej: Buenos Aires, Córdoba"
                             {...field}
-                            style={{ backgroundColor: "#ffffff" }}
+                            style={{
+                              backgroundColor: "#ffffff",
+                              fontSize: "16px",
+                              minHeight: "44px",
+                              position: "relative",
+                              zIndex: 1,
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -416,4 +495,3 @@ Ciudad de salida:`;
     </section>
   );
 }
-
