@@ -61,16 +61,16 @@ export default function AdminPage() {
   if (!user) {
     return (
       <main
-        className="min-h-screen flex items-center justify-center py-20"
+        className="min-h-screen flex items-center justify-center py-8 md:py-20 px-4"
         style={{ backgroundColor: "#D9DEE4" }}
       >
         <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle style={{ color: "#033671" }}>
+          <CardHeader className="p-4 md:p-6">
+            <CardTitle className="text-xl md:text-2xl" style={{ color: "#033671" }}>
               Panel de Administración
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 md:p-6">
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label
@@ -84,6 +84,7 @@ export default function AdminPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  className="text-base"
                 />
               </div>
               <div>
@@ -98,13 +99,14 @@ export default function AdminPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  className="text-base"
                 />
               </div>
               {error && <p className="text-sm text-red-600">{error}</p>}
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full"
+                className="w-full text-base"
                 style={{ backgroundColor: "#033671", color: "#ffffff" }}
               >
                 {loading ? (
@@ -124,14 +126,15 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen py-20" style={{ backgroundColor: "#D9DEE4" }}>
+    <main className="min-h-screen py-8 md:py-12 lg:py-20" style={{ backgroundColor: "#D9DEE4" }}>
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold" style={{ color: "#033671" }}>
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold" style={{ color: "#033671" }}>
             Panel de Administración
           </h1>
           <Button
             onClick={handleLogout}
+            className="w-full md:w-auto text-sm md:text-base"
             style={{ backgroundColor: "#033671", color: "#ffffff" }}
           >
             Cerrar Sesión
@@ -139,15 +142,31 @@ export default function AdminPage() {
         </div>
 
         <Tabs defaultValue="consultas" className="w-full">
-          <TabsList className="grid w-full grid-cols-7 mb-8">
-            <TabsTrigger value="consultas">Consultas</TabsTrigger>
-            <TabsTrigger value="flyers">Flyers</TabsTrigger>
-            <TabsTrigger value="testimonios">Testimonios</TabsTrigger>
-            <TabsTrigger value="faq">FAQ</TabsTrigger>
-            <TabsTrigger value="empresas">Empresas</TabsTrigger>
-            <TabsTrigger value="blog">Blog</TabsTrigger>
-            <TabsTrigger value="config">Configuración</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto mb-6 md:mb-8">
+            <TabsList className="grid w-full grid-cols-4 md:grid-cols-7 min-w-max md:min-w-0 h-auto">
+              <TabsTrigger value="consultas" className="text-xs md:text-sm px-2 md:px-4 py-2">
+                Consultas
+              </TabsTrigger>
+              <TabsTrigger value="flyers" className="text-xs md:text-sm px-2 md:px-4 py-2">
+                Flyers
+              </TabsTrigger>
+              <TabsTrigger value="testimonios" className="text-xs md:text-sm px-2 md:px-4 py-2">
+                Testimonios
+              </TabsTrigger>
+              <TabsTrigger value="faq" className="text-xs md:text-sm px-2 md:px-4 py-2">
+                FAQ
+              </TabsTrigger>
+              <TabsTrigger value="empresas" className="text-xs md:text-sm px-2 md:px-4 py-2">
+                Empresas
+              </TabsTrigger>
+              <TabsTrigger value="blog" className="text-xs md:text-sm px-2 md:px-4 py-2">
+                Blog
+              </TabsTrigger>
+              <TabsTrigger value="config" className="text-xs md:text-sm px-2 md:px-4 py-2">
+                Config
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="consultas">
             <ConsultasManager />

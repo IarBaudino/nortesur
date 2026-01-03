@@ -95,13 +95,13 @@ export function ConsultasManager() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex justify-between items-start md:items-center flex-col md:flex-row gap-2 md:gap-0">
         <div>
-          <h2 className="text-3xl font-bold" style={{ color: "#033671" }}>
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold" style={{ color: "#033671" }}>
             Consultas de Clientes
           </h2>
-          <p className="text-gray-600 mt-1">
+          <p className="text-sm md:text-base text-gray-600 mt-1">
             {consultas.length} consulta{consultas.length !== 1 ? "s" : ""} total
             {unreadCount > 0 && (
               <span className="ml-2">
@@ -132,11 +132,11 @@ export function ConsultasManager() {
               }`}
               onClick={() => openConsulta(consulta)}
             >
-              <CardContent className="p-6">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-bold" style={{ color: "#033671" }}>
+              <CardContent className="p-4 md:p-6">
+                <div className="flex justify-between items-start gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-2">
+                      <h3 className="text-base md:text-lg lg:text-xl font-bold break-words" style={{ color: "#033671" }}>
                         {consulta.nombre}
                       </h3>
                       {!consulta.leida && (

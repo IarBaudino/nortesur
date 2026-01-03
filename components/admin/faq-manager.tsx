@@ -110,7 +110,7 @@ export function FAQManager() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold" style={{ color: "#033671" }}>
+        <h2 className="text-xl md:text-2xl font-bold" style={{ color: "#033671" }}>
           Gestión de FAQ
         </h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
