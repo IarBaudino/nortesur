@@ -152,6 +152,32 @@ export function Footer() {
             © {new Date().getFullYear()} Nortesur Travel. Todos los derechos reservados.
           </p>
         </div>
+
+        {/* Tercera línea: Créditos de desarrollo */}
+        <div
+          className="border-t mt-3 pt-3 flex items-center justify-center text-xs"
+          style={{ borderColor: "rgba(109, 76, 5, 0.2)", color: "#CAD0DA" }}
+        >
+          <p className="text-center">
+            Desarrollo web por{" "}
+            <a
+              href="https://www.iarabaudinodev.com.ar/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#6D4C05] transition-colors duration-200 underline"
+              style={{ color: "#CAD0DA" }}
+            >
+              Iara Baudino
+            </a>
+            {" "}(<a
+              href="mailto:iara.baudino.dev@gmail.com"
+              className="hover:text-[#6D4C05] transition-colors duration-200"
+              style={{ color: "#CAD0DA" }}
+            >
+              iara.baudino.dev@gmail.com
+            </a>)
+          </p>
+        </div>
       </div>
     </footer>
   );
