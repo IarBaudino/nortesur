@@ -74,16 +74,17 @@ export default function ServiciosPage() {
                   className="group h-full flex flex-col bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden cursor-pointer"
                   onClick={() => openFlyer(flyer.id)}
                 >
-                  <div className="relative h-72 overflow-hidden bg-gray-100">
+                  <div className="relative aspect-[1200/864] overflow-hidden bg-gray-100">
                     {flyer.imagen && flyer.imagen.trim() !== "" ? (
                       <>
                         {flyer.imagen.includes("cloudinary.com") ? (
                           <img
                             src={flyer.imagen}
                             alt={flyer.titulo}
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 z-0"
+                            className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 z-0"
                             onError={(e) => {
                               console.error("❌ Error cargando imagen:", flyer.imagen, e);
+                              (e.target as HTMLImageElement).style.display = "none";
                             }}
                             onLoad={() => {
                               console.log("✅ Imagen cargada exitosamente:", flyer.imagen);
@@ -95,7 +96,7 @@ export default function ServiciosPage() {
                             alt={flyer.titulo}
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            className="object-cover transition-transform duration-700 group-hover:scale-110 z-0"
+                            className="object-contain transition-transform duration-700 group-hover:scale-110 z-0"
                             onError={(e) => {
                               console.error("❌ Error cargando imagen:", flyer.imagen, e);
                             }}
@@ -157,12 +158,15 @@ export default function ServiciosPage() {
                     <div className="space-y-6">
                       {/* Imagen */}
                       {selectedFlyerData.imagen && selectedFlyerData.imagen.trim() !== "" && (
-                        <div className="relative w-full h-96 rounded-lg overflow-hidden bg-gray-100">
+                        <div className="relative w-full aspect-[1200/864] rounded-lg overflow-hidden bg-gray-100">
                           {selectedFlyerData.imagen.includes("cloudinary.com") ? (
                             <img
                               src={selectedFlyerData.imagen}
                               alt={selectedFlyerData.titulo}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-contain"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = "none";
+                              }}
                             />
                           ) : (
                             <Image
@@ -170,8 +174,7 @@ export default function ServiciosPage() {
                               alt={selectedFlyerData.titulo}
                               fill
                               sizes="(max-width: 768px) 100vw, 800px"
-                              className="object-cover"
-                              unoptimized={selectedFlyerData.imagen.includes("cloudinary.com")}
+                              className="object-contain"
                             />
                           )}
                         </div>

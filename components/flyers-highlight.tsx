@@ -63,24 +63,38 @@ export function FlyersHighlight() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <Card className="group h-full flex flex-col bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-500">
-                    <div className="relative h-72 overflow-hidden bg-gray-100">
+                    <div className="relative aspect-[1200/864] overflow-hidden bg-gray-100">
                       {flyer.imagen && flyer.imagen.trim() !== "" ? (
                         <>
-                          <Image
-                            src={flyer.imagen}
-                            alt={flyer.titulo}
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            className="object-cover transition-transform duration-700 group-hover:scale-110 z-0"
-                            unoptimized={flyer.imagen.includes("cloudinary.com")}
-                            priority={index === 0}
-                            onError={(e) => {
-                              console.error("Error cargando imagen:", flyer.imagen, e);
-                            }}
-                            onLoad={() => {
-                              console.log("✅ Imagen cargada exitosamente:", flyer.imagen);
-                            }}
-                          />
+                          {flyer.imagen.includes("cloudinary.com") ? (
+                            <img
+                              src={flyer.imagen}
+                              alt={flyer.titulo}
+                              className="absolute inset-0 w-full h-full object-contain transition-transform duration-700 group-hover:scale-110 z-0"
+                              onError={(e) => {
+                                console.error("Error cargando imagen:", flyer.imagen, e);
+                                (e.target as HTMLImageElement).style.display = "none";
+                              }}
+                              onLoad={() => {
+                                console.log("✅ Imagen cargada exitosamente:", flyer.imagen);
+                              }}
+                            />
+                          ) : (
+                            <Image
+                              src={flyer.imagen}
+                              alt={flyer.titulo}
+                              fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                              className="object-contain transition-transform duration-700 group-hover:scale-110 z-0"
+                              priority={index === 0}
+                              onError={(e) => {
+                                console.error("Error cargando imagen:", flyer.imagen, e);
+                              }}
+                              onLoad={() => {
+                                console.log("✅ Imagen cargada exitosamente:", flyer.imagen);
+                              }}
+                            />
+                          )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-transparent z-10"></div>
                         </>
                       ) : (
