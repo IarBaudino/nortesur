@@ -57,22 +57,67 @@ export function ImageUpload({
       formData.append("file", file);
       formData.append("folder", folder);
 
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
+      let response: Response;
+      try {
+        response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+      } catch (fetchError: unknown) {
+        // Error de red o conexión
+        console.error("Error de red al subir imagen:", fetchError);
+        const isNetworkError = fetchError instanceof TypeError && fetchError.message.includes("fetch");
+        throw new Error(
+          isNetworkError
+            ? "Error de conexión. Verifica que el servidor esté corriendo y que tengas conexión a internet."
+            : `Error al conectar con el servidor: ${fetchError instanceof Error ? fetchError.message : "Error desconocido"}`
+        );
+      }
 
-      const data = await response.json();
+      // Verificar el tipo de contenido de la respuesta
+      const contentType = response.headers.get("content-type");
+      let data;
+
+      if (contentType && contentType.includes("application/json")) {
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          // Si falla el parseo JSON, leer como texto
+          const text = await response.text();
+          console.error("Error parseando JSON. Respuesta del servidor:", text);
+          throw new Error(
+            response.status === 413
+              ? "El archivo es demasiado grande. Por favor, reduce el tamaño de la imagen (máximo 10MB)."
+              : `Error del servidor (${response.status}): ${text.substring(0, 200)}`
+          );
+        }
+      } else {
+        // Si no es JSON, leer como texto para ver el error
+        const text = await response.text();
+        console.error("Respuesta no-JSON del servidor:", text);
+        throw new Error(
+          response.status === 413
+            ? "El archivo es demasiado grande. Por favor, reduce el tamaño de la imagen (máximo 10MB)."
+            : `Error del servidor: ${response.status} ${response.statusText}. ${text.substring(0, 200)}`
+        );
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || "Error al subir la imagen");
+        throw new Error(data.error || `Error al subir la imagen: ${response.status} ${response.statusText}`);
       }
 
       onChange(data.url);
       setPreview(data.url);
     } catch (error: unknown) {
       console.error("Error uploading image:", error);
-      const errorMessage = error instanceof Error ? error.message : "Error al subir la imagen";
+      let errorMessage = "Error al subir la imagen";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === "string") {
+        errorMessage = error;
+      }
+      
       alert(errorMessage);
       setPreview(null);
     } finally {

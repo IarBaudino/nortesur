@@ -1,9 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary/config";
 
+// Configuración para App Router
+export const runtime = "nodejs";
+export const maxDuration = 30;
+
+// Límite de tamaño: 10MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB en bytes
+
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
+    // Verificar que Cloudinary esté configurado
+    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+      console.error("Cloudinary no está configurado correctamente");
+      return NextResponse.json(
+        { error: "Error de configuración: Cloudinary no está configurado. Verifica las variables de entorno." },
+        { status: 500 }
+      );
+    }
+
+    let formData: FormData;
+    try {
+      formData = await request.formData();
+    } catch (error) {
+      console.error("Error parseando FormData:", error);
+      return NextResponse.json(
+        { error: "Error al procesar el archivo. Verifica que el archivo no sea demasiado grande." },
+        { status: 400 }
+      );
+    }
+
     const file = formData.get("file") as File;
     const folder = formData.get("folder") as string | null;
 
@@ -11,6 +37,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "No se proporcionó ningún archivo" },
         { status: 400 }
+      );
+    }
+
+    // Validar tamaño del archivo
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: `El archivo es demasiado grande. Tamaño máximo: 10MB. Tu archivo: ${(file.size / 1024 / 1024).toFixed(2)}MB` },
+        { status: 413 }
       );
     }
 

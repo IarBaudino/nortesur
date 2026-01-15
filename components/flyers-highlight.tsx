@@ -41,12 +41,12 @@ export function FlyersHighlight() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-16 relative z-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-[#033671] to-[#2E486B] bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 relative z-20" style={{ color: "#033671" }}>
             Nuestros Servicios
           </h2>
-          <p className="text-lg md:text-xl max-w-2xl mx-auto" style={{ color: "#2E486B" }}>
+          <p className="text-lg md:text-xl max-w-2xl mx-auto relative z-20" style={{ color: "#2E486B" }}>
             Descubre nuestras propuestas destacadas diseñadas para crear experiencias inolvidables
           </p>
         </motion.div>
