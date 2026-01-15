@@ -10,18 +10,24 @@ import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 
 function useHero() {
   const { config, loading } = useSiteConfig();
+  
+  // Filtrar imágenes vacías y asegurar que sean strings válidos
+  const imagenes = config.hero?.imagenes 
+    ? config.hero.imagenes.filter((img: string) => img && img.trim() !== "")
+    : [
+        "/images/head1.jpg",
+        "/images/head2.jpg",
+        "/images/head3.jpeg",
+        "/images/head4.jpeg",
+      ];
+  
   return {
     heroData: {
       titulo: config.hero?.titulo || "Descubre el Mundo con Nortesur Travel",
       subtitulo:
         config.hero?.subtitulo ||
         "Creamos experiencias únicas que recordarás para siempre",
-      imagenes: config.hero?.imagenes || [
-        "/images/head1.jpg",
-        "/images/head2.jpg",
-        "/images/head3.jpeg",
-        "/images/head4.jpeg",
-      ],
+      imagenes: imagenes,
       estadisticas: config.hero?.estadisticas || {
         paises: 50,
         destinos: 200,
@@ -76,31 +82,47 @@ export function HeroSection() {
     >
       {/* Background images carousel */}
       <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
-          {heroData.imagenes.map((image, index) => {
-            if (index !== currentImageIndex) return null;
-            return (
-              <motion.div
-                key={`${image}-${index}`}
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.1 }}
-                transition={{ duration: 1.2, ease: "easeInOut" }}
-                className="absolute inset-0"
-              >
-                <Image
-                  src={image}
-                  alt={`Background ${index + 1}`}
-                  fill
-                  sizes="100vw"
-                  className="object-cover"
-                  priority={index === 0}
-                  quality={90}
-                />
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
+        {heroData.imagenes.map((image, index) => (
+          <motion.div
+            key={`${image}-${index}`}
+            initial={false}
+            animate={{ 
+              opacity: index === currentImageIndex ? 1 : 0,
+              scale: index === currentImageIndex ? 1 : 1.05
+            }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+            className="absolute inset-0"
+            style={{ zIndex: index === currentImageIndex ? 1 : 0 }}
+          >
+            {image.includes("cloudinary.com") ? (
+              <img
+                src={image}
+                alt={`Background ${index + 1}`}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ objectFit: "cover" }}
+                onError={(e) => {
+                  console.error("Error cargando imagen del hero:", image, e);
+                }}
+                onLoad={() => {
+                  console.log("✅ Imagen del hero cargada exitosamente:", image);
+                }}
+              />
+            ) : (
+              <Image
+                src={image}
+                alt={`Background ${index + 1}`}
+                fill
+                sizes="100vw"
+                className="object-cover"
+                priority={index === 0}
+                quality={90}
+                onError={(e) => {
+                  console.error("Error cargando imagen del hero:", image, e);
+                }}
+              />
+            )}
+          </motion.div>
+        ))}
       </div>
 
       {/* Overlay con gradiente mejorado */}
