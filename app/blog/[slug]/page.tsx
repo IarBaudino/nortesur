@@ -122,7 +122,7 @@ export default function BlogPostPage({
           </Button>
 
           {post.imagen && (
-            <div className="relative h-96 mb-8 rounded-lg overflow-hidden">
+            <div className="relative h-72 mb-8 rounded-lg overflow-hidden">
               <Image
                 src={post.imagen}
                 alt={post.titulo}

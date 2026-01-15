@@ -74,7 +74,7 @@ export default function ServiciosPage() {
                   className="group h-full flex flex-col bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden cursor-pointer"
                   onClick={() => openFlyer(flyer.id)}
                 >
-                  <div className="relative h-64 overflow-hidden bg-gray-100">
+                  <div className="relative h-72 overflow-hidden bg-gray-100">
                     {flyer.imagen && flyer.imagen.trim() !== "" ? (
                       <>
                         {flyer.imagen.includes("cloudinary.com") ? (

@@ -38,7 +38,7 @@ export default function BlogPage() {
             {posts.map((post) => (
               <Card key={post.id} className="overflow-hidden">
                 {post.imagen && (
-                  <div className="relative h-48">
+                  <div className="relative h-72">
                     <Image
                       src={post.imagen}
                       alt={post.titulo}

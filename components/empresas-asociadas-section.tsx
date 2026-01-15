@@ -66,7 +66,7 @@ export function EmpresasAsociadasSection() {
                     className="flex-shrink-0 w-48 md:w-56 lg:w-64"
                   >
                     {hasUrl ? (
-                      <Card className="relative aspect-[3/2] rounded-xl border-2 flex items-center justify-center p-6 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105 group overflow-hidden border-gray-200 hover:border-[#6D4C05]">
+                      <Card className="relative aspect-square rounded-xl border-2 flex items-center justify-center p-6 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105 group overflow-hidden border-gray-200 hover:border-[#6D4C05]">
                         <a
                           {...wrapperProps}
                           className="absolute inset-0 z-10"
@@ -86,7 +86,7 @@ export function EmpresasAsociadasSection() {
                         />
                       </Card>
                     ) : (
-                      <Card className="relative aspect-[3/2] rounded-xl border-2 flex items-center justify-center p-6 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105 group overflow-hidden border-gray-200 hover:border-[#6D4C05]">
+                      <Card className="relative aspect-square rounded-xl border-2 flex items-center justify-center p-6 bg-white transition-all duration-300 hover:shadow-2xl hover:scale-105 group overflow-hidden border-gray-200 hover:border-[#6D4C05]">
                         <div className="absolute inset-0 bg-gradient-to-br from-[#6D4C05]/0 to-[#6D4C05]/0 group-hover:from-[#6D4C05]/5 group-hover:to-[#033671]/5 transition-all duration-300 z-0"></div>
                         <Image
                           src={empresa.logo}
