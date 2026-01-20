@@ -1,8 +1,20 @@
+export interface CategoriaFlyer {
+  id: string;
+  nombre: string;
+  slug: string;
+  imagen: string;
+  descripcion?: string;
+  orden: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Flyer {
   id: string;
   titulo: string;
   descripcion: string;
   imagen: string;
+  categoriaId?: string;
   destacado: boolean;
   createdAt: Date;
   updatedAt: Date;

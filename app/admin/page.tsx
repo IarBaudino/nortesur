@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2 } from "lucide-react";
 import { FlyersManager } from "@/components/admin/flyers-manager";
+import { CategoriasManager } from "@/components/admin/categorias-manager";
 import { TestimoniosManager } from "@/components/admin/testimonios-manager";
 import { FAQManager } from "@/components/admin/faq-manager";
 import { EmpresasManager } from "@/components/admin/empresas-manager";
@@ -143,9 +144,12 @@ export default function AdminPage() {
 
         <Tabs defaultValue="consultas" className="w-full">
           <div className="overflow-x-auto mb-6 md:mb-8">
-            <TabsList className="grid w-full grid-cols-4 md:grid-cols-7 min-w-max md:min-w-0 h-auto">
+            <TabsList className="grid w-full grid-cols-4 md:grid-cols-8 min-w-max md:min-w-0 h-auto">
               <TabsTrigger value="consultas" className="text-xs md:text-sm px-2 md:px-4 py-2">
                 Consultas
+              </TabsTrigger>
+              <TabsTrigger value="categorias" className="text-xs md:text-sm px-2 md:px-4 py-2">
+                Categorías de Servicios
               </TabsTrigger>
               <TabsTrigger value="flyers" className="text-xs md:text-sm px-2 md:px-4 py-2">
                 Flyers
@@ -170,6 +174,10 @@ export default function AdminPage() {
 
           <TabsContent value="consultas">
             <ConsultasManager />
+          </TabsContent>
+
+          <TabsContent value="categorias">
+            <CategoriasManager />
           </TabsContent>
 
           <TabsContent value="flyers">

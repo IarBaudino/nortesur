@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, Timestamp } from "firebase/firestore";
+import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, Timestamp, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { COLLECTIONS } from "@/lib/firebase/collections";
-import type { Flyer } from "@/lib/firebase/types";
+import type { Flyer, CategoriaFlyer } from "@/lib/firebase/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, Edit, Plus, Loader2 } from "lucide-react";
 import {
   Dialog,
@@ -23,6 +24,7 @@ import {
 
 export function FlyersManager() {
   const [flyers, setFlyers] = useState<Flyer[]>([]);
+  const [categorias, setCategorias] = useState<CategoriaFlyer[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingFlyer, setEditingFlyer] = useState<Flyer | null>(null);
@@ -30,12 +32,42 @@ export function FlyersManager() {
     titulo: "",
     descripcion: "",
     imagen: "",
+    categoriaId: "",
     destacado: false,
   });
 
   useEffect(() => {
+    fetchCategorias();
     fetchFlyers();
   }, []);
+
+  useEffect(() => {
+    // Recargar categorías cuando se abre el diálogo para asegurar que estén actualizadas
+    if (isDialogOpen) {
+      fetchCategorias();
+    }
+  }, [isDialogOpen]);
+
+  const fetchCategorias = async () => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, COLLECTIONS.CATEGORIAS_FLYERS), orderBy("orden", "asc"))
+      );
+      const categoriasData: CategoriaFlyer[] = [];
+      querySnapshot.forEach((doc) => {
+        categoriasData.push({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() || new Date(),
+          updatedAt: doc.data().updatedAt?.toDate() || new Date(),
+        } as CategoriaFlyer);
+      });
+      console.log("Categorías cargadas:", categoriasData.length, categoriasData);
+      setCategorias(categoriasData);
+    } catch (error) {
+      console.error("Error fetching categorias:", error);
+    }
+  };
 
   const fetchFlyers = async () => {
     try {
@@ -74,7 +106,7 @@ export function FlyersManager() {
 
       setIsDialogOpen(false);
       setEditingFlyer(null);
-      setFormData({ titulo: "", descripcion: "", imagen: "", destacado: false });
+      setFormData({ titulo: "", descripcion: "", imagen: "", categoriaId: "", destacado: false });
       fetchFlyers();
     } catch (error) {
       console.error("Error saving flyer:", error);
@@ -88,6 +120,7 @@ export function FlyersManager() {
       titulo: flyer.titulo,
       descripcion: flyer.descripcion,
       imagen: flyer.imagen,
+      categoriaId: flyer.categoriaId || "",
       destacado: flyer.destacado,
     });
     setIsDialogOpen(true);
@@ -123,7 +156,7 @@ export function FlyersManager() {
             <Button
               onClick={() => {
                 setEditingFlyer(null);
-                setFormData({ titulo: "", descripcion: "", imagen: "", destacado: false });
+                setFormData({ titulo: "", descripcion: "", imagen: "", categoriaId: "", destacado: false });
               }}
               style={{ backgroundColor: "#033671", color: "#ffffff" }}
             >
@@ -154,6 +187,41 @@ export function FlyersManager() {
                   required
                 />
               </div>
+              {categorias.length > 0 ? (
+                <div>
+                  <Label>Categoría</Label>
+                  <Select
+                    value={formData.categoriaId}
+                    onValueChange={(value) => {
+                      console.log("Categoría seleccionada:", value);
+                      setFormData({ ...formData, categoriaId: value });
+                    }}
+                    required
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Selecciona una categoría">
+                        {formData.categoriaId && categorias.find(c => c.id === formData.categoriaId)?.nombre}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="z-[300]">
+                      {categorias.map((categoria) => (
+                        <SelectItem key={categoria.id} value={categoria.id}>
+                          {categoria.nombre}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {categorias.length} categoría{categorias.length !== 1 ? 's' : ''} disponible{categorias.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
+              ) : (
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
+                  <p className="text-sm text-yellow-800">
+                    ⚠️ No hay categorías creadas. Por favor, crea categorías primero en la pestaña &quot;Categorías&quot;.
+                  </p>
+                </div>
+              )}
               <ImageUpload
                 value={formData.imagen}
                 onChange={(url) => setFormData({ ...formData, imagen: url })}
@@ -218,8 +286,11 @@ export function FlyersManager() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm mb-4" style={{ color: "#2E486B" }}>
+              <p className="text-sm mb-2" style={{ color: "#2E486B" }}>
                 {flyer.descripcion}
+              </p>
+              <p className="text-xs mb-4 text-gray-500">
+                Categoría: {categorias.find(c => c.id === flyer.categoriaId)?.nombre || "Sin categoría"}
               </p>
               <div className="flex gap-2">
                 <Button
