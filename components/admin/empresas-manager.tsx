@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  getDocs,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { COLLECTIONS } from "@/lib/firebase/collections";
 import type { EmpresaAsociada } from "@/lib/firebase/types";
@@ -14,6 +22,7 @@ import { Trash2, Edit, Plus, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -23,7 +32,9 @@ export function EmpresasManager() {
   const [empresas, setEmpresas] = useState<EmpresaAsociada[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingEmpresa, setEditingEmpresa] = useState<EmpresaAsociada | null>(null);
+  const [editingEmpresa, setEditingEmpresa] = useState<EmpresaAsociada | null>(
+    null
+  );
   const [formData, setFormData] = useState({
     nombre: "",
     logo: "",
@@ -104,7 +115,10 @@ export function EmpresasManager() {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin" style={{ color: "#033671" }} />
+        <Loader2
+          className="h-8 w-8 animate-spin"
+          style={{ color: "#033671" }}
+        />
       </div>
     );
   }
@@ -112,7 +126,10 @@ export function EmpresasManager() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl md:text-2xl font-bold" style={{ color: "#033671" }}>
+        <h2
+          className="text-xl md:text-2xl font-bold"
+          style={{ color: "#033671" }}
+        >
           Gestión de Empresas Asociadas
         </h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -133,13 +150,19 @@ export function EmpresasManager() {
               <DialogTitle style={{ color: "#033671" }}>
                 {editingEmpresa ? "Editar Empresa" : "Nueva Empresa"}
               </DialogTitle>
+              <DialogDescription className="sr-only">
+                Formulario para agregar o editar una empresa asociada (nombre,
+                logo, URL y orden).
+              </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Label>Nombre</Label>
                 <Input
                   value={formData.nombre}
-                  onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nombre: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -155,7 +178,9 @@ export function EmpresasManager() {
                 <Label>URL (opcional)</Label>
                 <Input
                   value={formData.url}
-                  onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, url: e.target.value })
+                  }
                   placeholder="https://..."
                 />
               </div>
@@ -164,7 +189,12 @@ export function EmpresasManager() {
                 <Input
                   type="number"
                   value={formData.orden}
-                  onChange={(e) => setFormData({ ...formData, orden: parseInt(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      orden: parseInt(e.target.value) || 0,
+                    })
+                  }
                   required
                 />
               </div>
@@ -176,7 +206,10 @@ export function EmpresasManager() {
                 >
                   Cancelar
                 </Button>
-                <Button type="submit" style={{ backgroundColor: "#033671", color: "#ffffff" }}>
+                <Button
+                  type="submit"
+                  style={{ backgroundColor: "#033671", color: "#ffffff" }}
+                >
                   {editingEmpresa ? "Actualizar" : "Crear"}
                 </Button>
               </div>
@@ -189,7 +222,9 @@ export function EmpresasManager() {
         {empresas.map((empresa) => (
           <Card key={empresa.id}>
             <CardHeader>
-              <CardTitle style={{ color: "#033671" }}>{empresa.nombre}</CardTitle>
+              <CardTitle style={{ color: "#033671" }}>
+                {empresa.nombre}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="relative h-32 mb-4">
@@ -204,7 +239,12 @@ export function EmpresasManager() {
               </div>
               {empresa.url && (
                 <p className="text-sm mb-4" style={{ color: "#2E486B" }}>
-                  <a href={empresa.url} target="_blank" rel="noopener noreferrer" className="underline">
+                  <a
+                    href={empresa.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline"
+                  >
                     Ver sitio web
                   </a>
                 </p>
@@ -233,7 +273,3 @@ export function EmpresasManager() {
     </div>
   );
 }
-
-
-
-

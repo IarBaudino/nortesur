@@ -57,7 +57,7 @@ service cloud.firestore {
 
 ## 🔒 ¿Qué hacen estas reglas?
 
-- **Lectura pública**: Cualquiera puede leer todas las colecciones (necesario para mostrar contenido en el sitio)
+- **Lectura pública**: Cualquiera puede leer todas las colecciones (necesario para mostrar contenido en el sitio: blog, flyers, testimonios, **empresas asociadas**, etc.)
 - **Escritura en consultas**: Cualquiera puede crear consultas (necesario para el formulario público)
 - **Lectura/Edición/Eliminación de consultas**: Solo usuarios autenticados (admin) pueden ver, editar o eliminar consultas
 - **Otras colecciones**: Solo usuarios autenticados pueden escribir en flyers, blog, testimonios, etc. (solo desde el panel admin)

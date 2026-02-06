@@ -13,22 +13,52 @@ export function useEmpresas() {
   useEffect(() => {
     async function fetchEmpresas() {
       try {
-        const q = query(
-          collection(db, COLLECTIONS.EMPRESAS),
-          orderBy("orden", "asc")
+        // Intentar con orderBy por si existe índice
+        try {
+          const q = query(
+            collection(db, COLLECTIONS.EMPRESAS),
+            orderBy("orden", "asc")
+          );
+          const querySnapshot = await getDocs(q);
+          const empresasData: EmpresaAsociada[] = [];
+          querySnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            empresasData.push({
+              id: docSnap.id,
+              ...data,
+              createdAt: data.createdAt?.toDate?.() || new Date(),
+            } as EmpresaAsociada);
+          });
+          setEmpresas(empresasData);
+          return;
+        } catch (orderByError) {
+          // Si falla (índice faltante o permisos), intentar sin orderBy y ordenar en memoria
+          console.warn(
+            "useEmpresas: orden por Firestore falló, usando orden en memoria.",
+            orderByError
+          );
+        }
+
+        const querySnapshot = await getDocs(
+          collection(db, COLLECTIONS.EMPRESAS)
         );
-        const querySnapshot = await getDocs(q);
         const empresasData: EmpresaAsociada[] = [];
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach((docSnap) => {
+          const data = docSnap.data();
           empresasData.push({
-            id: doc.id,
-            ...doc.data(),
-            createdAt: doc.data().createdAt?.toDate() || new Date(),
+            id: docSnap.id,
+            ...data,
+            createdAt: data.createdAt?.toDate?.() || new Date(),
           } as EmpresaAsociada);
         });
+        empresasData.sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0));
         setEmpresas(empresasData);
       } catch (error) {
-        console.error("Error fetching empresas:", error);
+        console.error(
+          "Error fetching empresas (revisa permisos Firestore para la colección 'empresas'):",
+          error
+        );
+        setEmpresas([]);
       } finally {
         setLoading(false);
       }
@@ -39,7 +69,3 @@ export function useEmpresas() {
 
   return { empresas, loading };
 }
-
-
-
-
