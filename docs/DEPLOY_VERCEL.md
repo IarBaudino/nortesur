@@ -18,6 +18,7 @@ Antes de hacer el deploy, asegúrate de:
 ## 🔧 Paso 1: Preparar el Repositorio
 
 1. **Asegúrate de que todo esté commiteado:**
+
    ```bash
    git add .
    git commit -m "Preparar para deploy"
@@ -52,6 +53,7 @@ Antes de hacer el deploy, asegúrate de:
 2. **Agrega cada variable** una por una:
 
 #### Firebase (Obligatorio)
+
 ```
 NEXT_PUBLIC_FIREBASE_API_KEY=tu_api_key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=tu_proyecto.firebaseapp.com
@@ -62,6 +64,7 @@ NEXT_PUBLIC_FIREBASE_APP_ID=tu_app_id
 ```
 
 #### Cloudinary (Obligatorio si usas upload de imágenes)
+
 ```
 CLOUDINARY_CLOUD_NAME=tu_cloud_name
 CLOUDINARY_API_KEY=tu_api_key
@@ -69,6 +72,7 @@ CLOUDINARY_API_SECRET=tu_api_secret
 ```
 
 #### Resend (Opcional - para notificaciones por email)
+
 ```
 RESEND_API_KEY=re_tu_api_key_aqui
 RESEND_FROM_EMAIL=onboarding@resend.dev
@@ -76,6 +80,7 @@ RESEND_TO_EMAIL=tu_email@ejemplo.com
 ```
 
 #### Gmail (Opcional - alternativa a Resend)
+
 ```
 EMAIL_USER=tu_email@gmail.com
 EMAIL_PASSWORD=tu_contraseña_de_aplicacion
@@ -83,11 +88,13 @@ EMAIL_TO=tu_email@ejemplo.com
 ```
 
 #### Site URL (Recomendado para SEO)
+
 ```
 NEXT_PUBLIC_SITE_URL=https://tudominio.com
 ```
 
-> ⚠️ **Importante:** 
+> ⚠️ **Importante:**
+>
 > - NO uses `NEXT_PUBLIC_` para variables secretas (como `CLOUDINARY_API_SECRET`, `RESEND_API_KEY`, `EMAIL_PASSWORD`)
 > - Solo usa `NEXT_PUBLIC_` para variables que se exponen al cliente (como Firebase config)
 > - Para producción, selecciona "Production" en el dropdown al agregar cada variable
@@ -97,6 +104,7 @@ NEXT_PUBLIC_SITE_URL=https://tudominio.com
 ## 🚀 Paso 4: Deploy
 
 1. **Revisa la configuración:**
+
    - Framework Preset: **Next.js** (debería detectarse automáticamente)
    - Root Directory: **./** (raíz del proyecto)
    - Build Command: **npm run build** (por defecto)
@@ -110,13 +118,45 @@ NEXT_PUBLIC_SITE_URL=https://tudominio.com
 
 ---
 
-## 🔗 Paso 5: Configurar Dominio Personalizado (Opcional)
+## 🔗 Paso 5: Configurar Dominio Personalizado (ej. dominio .com.ar en NIC.ar)
 
-1. En el dashboard de Vercel, ve a tu proyecto
-2. Ve a **Settings** → **Domains**
-3. Agrega tu dominio (ej: `nortesurtravel.com`)
-4. Sigue las instrucciones para configurar los DNS
-5. Vercel te dará los registros DNS que necesitas agregar en tu proveedor de dominio
+### En Vercel
+
+1. Entra a [vercel.com](https://vercel.com) y abre tu proyecto (nortesur).
+2. Ve a **Settings** (Configuración) → pestaña **Domains**.
+3. En "Add domain", escribe tu dominio:
+   - Para que funcione **con y sin www**: agrega los dos:
+     - `tudominio.com.ar`
+     - `www.tudominio.com.ar`
+4. Haz clic en **Add**.
+5. Vercel te mostrará qué registros DNS debes crear. Anota:
+   - Para el dominio **raíz** (tudominio.com.ar): suele pedir un **registro A** con valor `76.76.21.21`, o un **CNAME** (Vercel indica cuál).
+   - Para **www** (www.tudominio.com.ar): suele pedir un **CNAME** con valor `cname.vercel-dns.com`.
+
+### En NIC.ar (o donde gestiones el DNS)
+
+6. Entra al panel donde administras el dominio (NIC.ar o el proveedor que te dio NIC.ar para DNS).
+7. Busca la sección **DNS**, **Zona DNS**, **Registros** o **Nameservers**.
+8. Crea los registros que Vercel te indicó:
+   - **Tipo A** (para el dominio sin www):
+     - Nombre/Host: `@` o vacío (según el panel).
+     - Valor/Destino: `76.76.21.21`.
+     - TTL: 3600 (o el que sugiera el panel).
+   - **Tipo CNAME** (para www):
+     - Nombre/Host: `www`.
+     - Valor/Destino: `cname.vercel-dns.com`.
+     - TTL: 3600.
+9. Guarda los cambios. La propagación puede tardar **unos minutos hasta 48 horas** (suele ser menos de 1 hora).
+
+### Verificar en Vercel
+
+10. En Vercel → **Settings** → **Domains**, al lado del dominio verás un estado (**Valid Configuration**, **Pending** o un error).
+11. Cuando figure como verificado, Vercel activará el **certificado SSL** (HTTPS) automáticamente.
+
+### Notas para dominios .ar
+
+- Si en NIC.ar solo puedes cambiar **nameservers** (servidores de nombres), puedes usar los DNS de Vercel: en **Domains** → tu dominio, Vercel te muestra los nameservers (ej. `ns1.vercel-dns.com`, `ns2.vercel-dns.com`). Pon esos en NIC.ar y luego los registros A/CNAME los configuras en Vercel.
+- Si prefieres dejar los DNS donde están (sin cambiar nameservers), solo agrega en ese panel los registros **A** y **CNAME** que te indique Vercel.
 
 ---
 
@@ -196,10 +236,3 @@ Una vez que el deploy esté completo, tu sitio estará en vivo y accesible desde
 **URL de ejemplo:** `https://nortesur-travel.vercel.app`
 
 ¡Felicidades por tu nuevo sitio web! 🌍✈️
-
-
-
-
-
-
-

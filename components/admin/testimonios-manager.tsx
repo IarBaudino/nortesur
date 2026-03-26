@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  getDocs,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { COLLECTIONS } from "@/lib/firebase/collections";
 import type { Testimonio } from "@/lib/firebase/types";
@@ -24,7 +32,9 @@ export function TestimoniosManager() {
   const [testimonios, setTestimonios] = useState<Testimonio[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingTestimonio, setEditingTestimonio] = useState<Testimonio | null>(null);
+  const [editingTestimonio, setEditingTestimonio] = useState<Testimonio | null>(
+    null,
+  );
   const [formData, setFormData] = useState({
     nombre: "",
     destino: "",
@@ -39,7 +49,9 @@ export function TestimoniosManager() {
 
   const fetchTestimonios = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, COLLECTIONS.TESTIMONIOS));
+      const querySnapshot = await getDocs(
+        collection(db, COLLECTIONS.TESTIMONIOS),
+      );
       const testimoniosData: Testimonio[] = [];
       querySnapshot.forEach((doc) => {
         testimoniosData.push({
@@ -48,7 +60,11 @@ export function TestimoniosManager() {
           createdAt: doc.data().createdAt?.toDate() || new Date(),
         } as Testimonio);
       });
-      setTestimonios(testimoniosData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()));
+      setTestimonios(
+        testimoniosData.sort(
+          (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+        ),
+      );
     } catch (error) {
       console.error("Error fetching testimonios:", error);
     } finally {
@@ -61,18 +77,29 @@ export function TestimoniosManager() {
     try {
       const data = {
         ...formData,
-        createdAt: editingTestimonio ? editingTestimonio.createdAt : Timestamp.now(),
+        createdAt: editingTestimonio
+          ? editingTestimonio.createdAt
+          : Timestamp.now(),
       };
 
       if (editingTestimonio) {
-        await updateDoc(doc(db, COLLECTIONS.TESTIMONIOS, editingTestimonio.id), data);
+        await updateDoc(
+          doc(db, COLLECTIONS.TESTIMONIOS, editingTestimonio.id),
+          data,
+        );
       } else {
         await addDoc(collection(db, COLLECTIONS.TESTIMONIOS), data);
       }
 
       setIsDialogOpen(false);
       setEditingTestimonio(null);
-      setFormData({ nombre: "", destino: "", mensaje: "", calificacion: 5, foto: "" });
+      setFormData({
+        nombre: "",
+        destino: "",
+        mensaje: "",
+        calificacion: 5,
+        foto: "",
+      });
       fetchTestimonios();
     } catch (error) {
       console.error("Error saving testimonio:", error);
@@ -106,7 +133,10 @@ export function TestimoniosManager() {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin" style={{ color: "#033671" }} />
+        <Loader2
+          className="h-8 w-8 animate-spin"
+          style={{ color: "#033671" }}
+        />
       </div>
     );
   }
@@ -114,7 +144,10 @@ export function TestimoniosManager() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl md:text-2xl font-bold" style={{ color: "#033671" }}>
+        <h2
+          className="text-xl md:text-2xl font-bold"
+          style={{ color: "#033671" }}
+        >
           Gestión de Testimonios
         </h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -122,7 +155,13 @@ export function TestimoniosManager() {
             <Button
               onClick={() => {
                 setEditingTestimonio(null);
-                setFormData({ nombre: "", destino: "", mensaje: "", calificacion: 5, foto: "" });
+                setFormData({
+                  nombre: "",
+                  destino: "",
+                  mensaje: "",
+                  calificacion: 5,
+                  foto: "",
+                });
               }}
               style={{ backgroundColor: "#033671", color: "#ffffff" }}
             >
@@ -141,7 +180,9 @@ export function TestimoniosManager() {
                 <Label>Nombre</Label>
                 <Input
                   value={formData.nombre}
-                  onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nombre: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -149,7 +190,9 @@ export function TestimoniosManager() {
                 <Label>Destino</Label>
                 <Input
                   value={formData.destino}
-                  onChange={(e) => setFormData({ ...formData, destino: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, destino: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -157,7 +200,9 @@ export function TestimoniosManager() {
                 <Label>Mensaje</Label>
                 <Textarea
                   value={formData.mensaje}
-                  onChange={(e) => setFormData({ ...formData, mensaje: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, mensaje: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -168,7 +213,12 @@ export function TestimoniosManager() {
                   min="1"
                   max="5"
                   value={formData.calificacion}
-                  onChange={(e) => setFormData({ ...formData, calificacion: parseInt(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      calificacion: parseInt(e.target.value),
+                    })
+                  }
                   required
                 />
               </div>
@@ -188,7 +238,10 @@ export function TestimoniosManager() {
                 >
                   Cancelar
                 </Button>
-                <Button type="submit" style={{ backgroundColor: "#033671", color: "#ffffff" }}>
+                <Button
+                  type="submit"
+                  style={{ backgroundColor: "#033671", color: "#ffffff" }}
+                >
                   {editingTestimonio ? "Actualizar" : "Crear"}
                 </Button>
               </div>
@@ -201,7 +254,9 @@ export function TestimoniosManager() {
         {testimonios.map((testimonio) => (
           <Card key={testimonio.id}>
             <CardHeader>
-              <CardTitle style={{ color: "#033671" }}>{testimonio.nombre}</CardTitle>
+              <CardTitle style={{ color: "#033671" }}>
+                {testimonio.nombre}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm mb-2" style={{ color: "#2E486B" }}>
@@ -237,7 +292,3 @@ export function TestimoniosManager() {
     </div>
   );
 }
-
-
-
-
